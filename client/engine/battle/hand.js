@@ -32,4 +32,7 @@ export const playCard = function(state, { cardId, target, targetType }) {
 
 export const decrementCard = function(state, { cardId, hero }) {
   state.heroes[hero].cards[cardId].count--
+  if(state.heroes[hero].cards[cardId].count <= 0) {
+    delete state.heroes[hero].cards[cardId]
+  }
 }

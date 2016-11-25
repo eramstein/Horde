@@ -22,4 +22,16 @@ body {
   display: block;
 }
 
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
 </style>

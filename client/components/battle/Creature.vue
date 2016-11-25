@@ -10,9 +10,11 @@
       </div>
       <div class="wrapper">
         <div class="stats">
-          <div class="hp round-box">{{ hp }}</div>
-          <div class="sp round-box">{{ sp }}</div>
-          <div v-bind:class="{ atk: true, hp: data.template.attackType === 'hp', sp: data.template.attackType === 'sp' }">
+          <div class="pull-left">
+            <div class="hp round-box">{{ hp }}</div>
+            <div class="sp round-box">{{ sp }}</div>
+          </div>
+          <div v-bind:class="{ 'pull-right': true, atk: true, hp: data.template.attackType === 'hp', sp: data.template.attackType === 'sp' }">
             {{ data.template.attackValue }}
           </div>
         </div>
@@ -71,16 +73,17 @@ export default {
       font-size: 25px;
     } 
     .stats {
+      width: 100%;
       position: absolute;
       bottom: 0;
       right: 0;
       padding-bottom: 5px;
-      div {
-        float: left;      
+      div {    
         font-weight: bold;
         margin-left: 3px;
       }
-      .round-box {      
+      .round-box {
+        float: left;
         text-align: center;
         width: 22px;
         height: 20px;

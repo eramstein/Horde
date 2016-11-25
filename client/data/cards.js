@@ -30,6 +30,6 @@ export default {
     attackType: 'hp',
     attackValue: 1,
     abilities: [],
-    keywords: { static: true },
+    keywords: { static: true, pacific: true },
   },
 }

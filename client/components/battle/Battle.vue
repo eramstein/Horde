@@ -46,10 +46,10 @@ export default {
         return this.$store.getters.opponentCells
     },
     playerCreatures() {
-        return this.$store.getters.playerCreatures.filter(c => c.count > 0)
+        return this.$store.getters.playerCreatures
     },
     opponentCreatures() {
-        return this.$store.getters.opponentCreatures.filter(c => c.count > 0)
+        return this.$store.getters.opponentCreatures
     },
     player() {
         return this.$store.getters.player
