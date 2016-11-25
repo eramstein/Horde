@@ -52,6 +52,12 @@ module.exports = {
     loaders: {},
     postcss: config.postcss
   },
+  worker: {
+      output: {
+          filename: '[name].worker.js',
+          chunkFilename: '[name].worker.js'
+      }
+  },
   plugins: [
     new webpack.ProvidePlugin({
         '_': 'lodash'
