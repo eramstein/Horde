@@ -1,5 +1,5 @@
 import { idPrefix } from '../config'
-import { getCreaturesAtCell } from './battlefield'
+import { isCellOccupied } from './battlefield'
 import cards from '../../data/cards'
 
 export const summon = function (state, { creatureName, hero , cell }) {
@@ -15,22 +15,33 @@ export const summon = function (state, { creatureName, hero , cell }) {
     pos: cell,
     hasMoved: 0,
     hasAttacked: 0,
+    damageHp: 0,
+    damageSp: 0,
     summonedOnTurn: state.turn
   }
   state.creatures = creatures
+}
+
+export const destroy = function (state, { creatureId }) {  
+  delete state.creatures[creatureId]
 }
 
 export const move = function (state, { creatureId, cell }) {
   const creatures = _.cloneDeep(state.creatures)
   const creature = creatures[creatureId]
 
-  const cellOccupied = getCreaturesAtCell(state, cell).length > 0
+  // is the move invalid ?
+
+  const cellOccupied = isCellOccupied(state, cell)
+
   const staticCreature = creature.template.keywords.static
+
   const wrongColumn = creature.template.keywords.static
-  const exhausted = 
-    creature.hasMoved && !creature.template.keywords.extraMoves
+
+  const exhausted = creature.hasMoved && !creature.template.keywords.extraMoves
     || creature.template.keywords.extraMoves && creature.hasMoved > creature.template.keywords.extraMoves
     || creature.hasAttacked && !creature.template.keywords.attackAndMove
+
   const summoningSickness = 
     creature.summonedOnTurn === state.turn && !creature.template.keywords.haste
 
@@ -40,6 +51,8 @@ export const move = function (state, { creatureId, cell }) {
   if (exhausted) { console.log('ERROR: trying to move an exhausted creature'); return false; }
   if (summoningSickness) { console.log('ERROR: trying to move a summon sick creature'); return false; }
   
+  // if move valid, do it
+
   creature.hasMoved++
   creature.pos = cell
   state.creatures = creatures

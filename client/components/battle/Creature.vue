@@ -10,8 +10,8 @@
       </div>
       <div class="wrapper">
         <div class="stats">
-          <div class="hp round-box">{{ data.template.hp }}</div>
-          <div class="sp round-box">{{ data.template.sp }}</div>
+          <div class="hp round-box">{{ hp }}</div>
+          <div class="sp round-box">{{ sp }}</div>
           <div v-bind:class="{ atk: true, hp: data.template.attackType === 'hp', sp: data.template.attackType === 'sp' }">
             {{ data.template.attackValue }}
           </div>
@@ -41,6 +41,12 @@ export default {
     },
     height() {
         return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
+    },
+    hp() {
+        return this.data.template.hp - this.data.damageHp
+    },
+    sp() {
+        return this.data.template.sp - this.data.damageSp
     },
   },
   methods: {

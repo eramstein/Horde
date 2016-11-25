@@ -1,4 +1,4 @@
-import { getCreaturesAtCell } from './battlefield'
+import { isCellOccupied } from './battlefield'
 import { summon } from './creature'
 import { addMana } from './hero'
 
@@ -10,7 +10,7 @@ export const playCard = function(state, { cardId, target, targetType }) {
   if(state.heroes.player.mana <  card.template.cost) { console.log('ERROR: trying to play card without enough mana'); return false; }
 
   if (card.template.type === 'creature' && targetType === 'cell') {
-    if (!getCreaturesAtCell(state, target)) {
+    if (!isCellOccupied(state, target)) {
       addMana(state, {
         count: -card.template.cost,
         hero: 'player'
@@ -28,7 +28,6 @@ export const playCard = function(state, { cardId, target, targetType }) {
       console.log('ERROR: trying to play a creature on an occupied cell')
     }
   }
-
 }
 
 export const decrementCard = function(state, { cardId, hero }) {

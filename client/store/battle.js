@@ -1,6 +1,11 @@
+import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
+
 import { playCard } from '../engine/battle/hand'
 import { move as moveCreature } from '../engine/battle/creature'
-import { passTurn } from '../engine/battle/turn'
+import { attackCreature } from '../engine/battle/combat'
+import { startTurn } from '../engine/battle/turn'
+
+const AI = new aiWorker
 
 // MUTATIONS
 // ----------------------------------------------------
@@ -8,7 +13,8 @@ import { passTurn } from '../engine/battle/turn'
 const mutations = {
   PLAY_CARD: playCard,
   MOVE_CREATURE: moveCreature,
-  PASS_TURN: passTurn,
+  ATTACK_CREATURE: attackCreature,
+  START_TURN: startTurn,
   SELECT_CARD(state, { cardId }) {    
     state.ui.selectedCardId = state.ui.selectedCardId === cardId ? null : cardId
     state.ui.selectedCreatureId = null
@@ -16,6 +22,12 @@ const mutations = {
   SELECT_CREATURE(state, { creatureId }) {
     state.ui.selectedCreatureId = state.ui.selectedCreatureId === creatureId ? null : creatureId
     state.ui.selectedCardId = null
+  },
+  APPLY_AI_ACTIONS(state, newState) {
+    // state = newState doesn't work (vuex doesn't work with changing root state)
+    _.forOwn(newState, function(value, key) {
+      state[key] = value
+    })
   },
 }
 
@@ -49,12 +61,30 @@ const actions = {
     commit('SELECT_CARD', { cardId })
   },
 
-  clickCreature({ commit }, { creatureId }) {
-    commit('SELECT_CREATURE', { creatureId })
+  clickCreature({ commit, state }, { creatureId }) {
+    const selectedCreatureId = state.ui.selectedCreatureId
+    // if a player's card was selected, and the target is an opponent's creature, attack it
+    if (state.creatures[selectedCreatureId] && 
+        state.creatures[selectedCreatureId].controller === 'player' && 
+        state.creatures[creatureId].controller === 'opponent') {
+      commit('ATTACK_CREATURE', { attackerCreatureId: selectedCreatureId, targetCreatureId: creatureId })
+    } else {
+    // else, select it
+      commit('SELECT_CREATURE', { creatureId })
+    }
+    
   },
 
-  clickTurnButton({ commit }) {
-    commit('PASS_TURN')
+  clickTurnButton({ commit, state }) {
+    // pass turn to AI
+    commit('START_TURN', { hero: 'opponent' })
+    AI.postMessage(state)
+    // when AI is done
+    AI.onmessage = function(e) {
+      commit('APPLY_AI_ACTIONS', e.data)
+      // back to player
+      commit('START_TURN', { hero: 'player' })
+    }    
   },
 }
 

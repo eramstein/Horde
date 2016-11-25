@@ -1,6 +1,11 @@
-export const getCreaturesAtCell = function(state, { row, column }) {
-  const count = _.filter(state.creatures, (c) => {
-    return c.pos.row === row && c.pos.column === column
-  }).length;
-  return count > 0 ? true : false
+export const isCellOccupied = function(state, { row, column }) {
+  return creatureAtCell(state, { row, column }) ? true : false
 }
+
+export const creatureAtCell = function(state, { row, column }) {
+  const creatures = _.filter(state.creatures, (c) => {
+    return c.pos.row === row && c.pos.column === column
+  });
+  return creatures.length > 0 ? creatures[0] : null
+}
+
