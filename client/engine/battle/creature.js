@@ -72,6 +72,8 @@ export const move = function (state, { creatureId, cell }) {
 export const addModifier = function (state, { creatureId, modifier }) {
   let creature = state.creatures[creatureId]
 
+  modifier.id = 'modif-' + (Math.random() * 1000000000000) // lol
+console.log('add', modifier.id);
   creature.modifiers.push(modifier)
   
   if(modifier.type === 'hpMax') {
@@ -93,6 +95,31 @@ export const addModifier = function (state, { creatureId, modifier }) {
       }
     } else {
       creature.keywords[modifier.value.keyword] = modifier.value.val || true
+    }
+  }  
+}
+
+export const cancelModifier = function (state, { creatureId, modifier }) {
+  let creature = state.creatures[creatureId]
+
+  creature.modifiers = _.filter(creature.modifiers,  m => m.id !== modifier.id )
+
+  if(modifier.type === 'hpMax') {
+    creature.hpMax -= modifier.value    
+  }
+  if(modifier.type === 'spMax') {
+    creature.spMax -= modifier.value
+  }
+  if(modifier.type === 'attackValue') {
+    creature.attackValue -= modifier.value
+  }
+
+  if(modifier.type === 'keyword') {
+    let currentVal = creature.keywords[modifier.value.keyword]
+    if (currentVal && _.isNumber(currentVal)) {
+      currentVal =  currentVal - (modifier.value.val || 0)
+    } else {
+      creature.keywords[modifier.value.keyword] = false
     }
   }  
 }

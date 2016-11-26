@@ -1,4 +1,7 @@
+import { cancelModifier } from './creature'
+
 export const startTurn = function (state, { hero }) {
+  clearEndOfTurnModifiers(state)
   state.currentPlayer = hero
   incrementMana(state, { hero, count: 1 })
   replenishMana(state, { hero })
@@ -22,4 +25,14 @@ export const refreshCreatures = function (state, { hero }) {
       c.hasAttacked = 0
       c.hasMoved = 0
     })
+}
+
+export const clearEndOfTurnModifiers = function (state) {
+  _.forEach(state.creatures, (c) => {
+    _.forEach(c.modifiers, (m) => {
+      if (m.until === 'eot') {
+        cancelModifier(state, { creatureId: c.id, modifier: m })
+      }      
+    })
+  })
 }

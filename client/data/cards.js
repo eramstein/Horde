@@ -14,7 +14,7 @@ export default {
         trigger: 'creatureMoved',
         effect: (state, me, { creatureId }) => {
             if(me.id !== creatureId) { return false }
-            const modifier = { type: 'sp', value: 1, until: null }
+            const modifier = { type: 'attackValue', value: 1, until: null }
             const targets = adjacentAllies(state, { ...me.pos, hero: me.controller })
             _.forEach(targets, (c) => {
                 addModifier(state, { creatureId: c.id, modifier })
