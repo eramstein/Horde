@@ -11,11 +11,11 @@
       <div class="wrapper">
         <div class="stats">
           <div class="pull-left">
-            <div class="hp round-box">{{ hp }}</div>
-            <div class="sp round-box">{{ sp }}</div>
+            <div class="hp round-box">{{ data.hp }}</div>
+            <div class="sp round-box">{{ data.sp }}</div>
           </div>
-          <div v-bind:class="{ 'pull-right': true, atk: true, hp: data.template.attackType === 'hp', sp: data.template.attackType === 'sp' }">
-            {{ data.template.attackValue }}
+          <div v-bind:class="{ 'pull-right': true, atk: true, hp: data.attackType === 'hp', sp: data.attackType === 'sp' }">
+            {{ data.attackValue }}
           </div>
         </div>
       </div>
@@ -43,12 +43,6 @@ export default {
     },
     height() {
         return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
-    },
-    hp() {
-        return this.data.template.hp - this.data.damageHp
-    },
-    sp() {
-        return this.data.template.sp - this.data.damageSp
     },
   },
   methods: {

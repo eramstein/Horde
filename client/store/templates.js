@@ -8,7 +8,7 @@ export const setTemplates = function (state, add) {
     c.template = add ? cards[c.name] : null
   })
   _.forEach(state.game.battle.creatures, (c) => {
-    c.template = add ? cards[c.name] : null
+    c.abilities = add ? cards[c.name].abilities : null
   })
   return state
 }
@@ -21,7 +21,7 @@ export const setBattleTemplates = function (state, add) {
     c.template = add ? cards[c.name] : null
   })
   _.forEach(state.creatures, (c) => {
-    c.template = add ? cards[c.name] : null
+    c.abilities = add ? cards[c.name].abilities : null
   })
   return state
 }

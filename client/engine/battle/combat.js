@@ -1,66 +1,50 @@
 import { creatureAtCell } from './battlefield'
-import { destroy as destroyCreature, getCurrentState } from './creature'
+import { destroy as destroyCreature } from './creature'
 import { damageHero } from './hero'
 
 
 
 export const attackCreature = function (state, { attackerCreatureId, targetCreatureId }) {
-  const creatures = _.cloneDeep(state.creatures)
-
   const creatureCanAttack = canAttack(state, { attackerCreatureId })
   if (!creatureCanAttack) { return false; }
   
   const invalidTarget = !isValidAttackTarget(state, { attackerCreatureId, targetCreatureId })
   if (invalidTarget) { console.log('ERROR: invalid attack target'); return false; }
 
-  // if attack valid, do it
-  creatures[attackerCreatureId].hasAttacked++
-  state.creatures = creatures
+  state.creatures[attackerCreatureId].hasAttacked++
   dealCombatDamage(state, { attackerCreatureId, targetCreatureId })
 }
 
 
 
 export const attackOpponent = function (state, { attackerCreatureId }) {
-  const creatures = _.cloneDeep(state.creatures)
-
-  const attackerState = getCurrentState(state, attackerCreatureId)
+  const attacker = state.creatures[attackerCreatureId]
 
   const creatureCanAttack = canAttack(state, { attackerCreatureId })
   if (!creatureCanAttack) { return false; }
 
-  // if attack valid, do it
-  creatures[attackerCreatureId].hasAttacked++
-  state.creatures = creatures
-
-  damageHero(state, { hero: 'opponent', damage: attackerState.attackValue, sourceType: 'creature', source: attackerCreatureId })
+  attacker.hasAttacked++
+  damageHero(state, { hero: 'opponent', damage: attacker.attackValue, sourceType: 'creature', source: attackerCreatureId })
 }
 
 
 
 export const dealCombatDamage = function (state, { attackerCreatureId, targetCreatureId }) {
-  let creatures = _.cloneDeep(state.creatures)
-  const defender = creatures[targetCreatureId]
-  const attackerState = getCurrentState(state, attackerCreatureId)
-  const defenderState = getCurrentState(state, targetCreatureId)
+  const attacker = state.creatures[attackerCreatureId]
+  const defender = state.creatures[targetCreatureId]
 
-  if (attackerState.attackType === 'hp') {
-    defender.damageHp = defenderState.damageHp + attackerState.attackValue
-    if (defender.damageHp >= defenderState.hp) {
-      destroyCreature(state, { creatureId: targetCreatureId })
-      creatures = state.creatures
-    }
+  if (attacker.attackType === 'hp') {
+    defender.hp = defender.hp - attacker.attackValue
   }
 
-  if (attackerState.attackType === 'sp') {
-    defender.damageSp = defenderState.damageSp + attackerState.attackValue
-    if (defender.damageSp >= defenderState.sp) {
-      destroyCreature(state, { creatureId: targetCreatureId })
-      creatures = state.creatures
-    }
+  if (attacker.attackType === 'sp') {
+    defender.sp = defender.sp - attacker.attackValue
   }
 
-  state.creatures = creatures
+  if (defender.hp <= 0 || defender.sp <= 0) {
+    destroyCreature(state, { creatureId: targetCreatureId })
+  }
+
 }
 
 
@@ -68,16 +52,16 @@ export const dealCombatDamage = function (state, { attackerCreatureId, targetCre
 
 export const canAttack = function (state, { attackerCreatureId }) {
 
-  const attackerState = getCurrentState(state, attackerCreatureId)
+  const attacker = state.creatures[attackerCreatureId]
   
-  const exhausted = attackerState.hasAttacked && !attackerState.keywords.extraAttacks
-    || attackerState.keywords.extraAttacks && attackerState.hasAttacked > attackerState.keywords.extraAttacks
-    || attackerState.hasMoved && !attackerState.keywords.attackAndMove
+  const exhausted = attacker.hasAttacked && !attacker.keywords.extraAttacks
+    || attacker.keywords.extraAttacks && attacker.hasAttacked > attacker.keywords.extraAttacks
+    || attacker.hasMoved && !attacker.keywords.attackAndMove
 
   const summoningSickness = 
-    attackerState.summonedOnTurn === state.turn && !attackerState.keywords.haste
+    attacker.summonedOnTurn === state.turn && !attacker.keywords.haste
 
-  const isPacific = attackerState.keywords.pacific === true
+  const isPacific = attacker.keywords.pacific === true
 
   if (exhausted) { console.log('ERROR: trying to attack with an exhausted creature'); return false; }
   if (summoningSickness) { console.log('ERROR: trying to attack with a summon sick creature'); return false; }
@@ -91,8 +75,8 @@ export const canAttack = function (state, { attackerCreatureId }) {
 
 const isValidAttackTarget = function (state, { attackerCreatureId, targetCreatureId }) {
 
-  const attacker = getCurrentState(state, attackerCreatureId)
-  const target = getCurrentState(state, targetCreatureId)
+  const attacker = state.creatures[attackerCreatureId]
+  const target = state.creatures[targetCreatureId]
 
   // different rows
   if (attacker.pos.row !== target.pos.row) {
