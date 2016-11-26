@@ -1,32 +1,39 @@
 import { creatureAtCell } from './battlefield'
 import { destroy as destroyCreature, getCurrentState } from './creature'
+import { damageHero } from './hero'
 
 
 
 export const attackCreature = function (state, { attackerCreatureId, targetCreatureId }) {
   const creatures = _.cloneDeep(state.creatures)
-  const attackerState = getCurrentState(state, attackerCreatureId)
+
+  const creatureCanAttack = canAttack(state, { attackerCreatureId })
+  if (!creatureCanAttack) { return false; }
   
   const invalidTarget = !isValidAttackTarget(state, { attackerCreatureId, targetCreatureId })
-
-  const exhausted = attackerState.hasAttacked && !attackerState.keywords.extraAttacks
-    || attackerState.keywords.extraAttacks && attackerState.hasAttacked > attackerState.keywords.extraAttacks
-    || attackerState.hasMoved && !attackerState.keywords.attackAndMove
-
-  const summoningSickness = 
-    attackerState.summonedOnTurn === state.turn && !attackerState.keywords.haste
-
-  const isPacific = attackerState.keywords.pacific === true
-
   if (invalidTarget) { console.log('ERROR: invalid attack target'); return false; }
-  if (exhausted) { console.log('ERROR: trying to attack with an exhausted creature'); return false; }
-  if (summoningSickness) { console.log('ERROR: trying to attack with a summon sick creature'); return false; }
-  if (isPacific) { console.log('ERROR: trying to attack with a pacific creature'); return false; }
 
   // if attack valid, do it
   creatures[attackerCreatureId].hasAttacked++
   state.creatures = creatures
   dealCombatDamage(state, { attackerCreatureId, targetCreatureId })
+}
+
+
+
+export const attackOpponent = function (state, { attackerCreatureId }) {
+  const creatures = _.cloneDeep(state.creatures)
+
+  const attackerState = getCurrentState(state, attackerCreatureId)
+
+  const creatureCanAttack = canAttack(state, { attackerCreatureId })
+  if (!creatureCanAttack) { return false; }
+
+  // if attack valid, do it
+  creatures[attackerCreatureId].hasAttacked++
+  state.creatures = creatures
+
+  damageHero(state, { hero: 'opponent', damage: attackerState.attackValue, sourceType: 'creature', source: attackerCreatureId })
 }
 
 
@@ -54,6 +61,30 @@ export const dealCombatDamage = function (state, { attackerCreatureId, targetCre
   }
 
   state.creatures = creatures
+}
+
+
+
+
+export const canAttack = function (state, { attackerCreatureId }) {
+
+  const attackerState = getCurrentState(state, attackerCreatureId)
+  
+  const exhausted = attackerState.hasAttacked && !attackerState.keywords.extraAttacks
+    || attackerState.keywords.extraAttacks && attackerState.hasAttacked > attackerState.keywords.extraAttacks
+    || attackerState.hasMoved && !attackerState.keywords.attackAndMove
+
+  const summoningSickness = 
+    attackerState.summonedOnTurn === state.turn && !attackerState.keywords.haste
+
+  const isPacific = attackerState.keywords.pacific === true
+
+  if (exhausted) { console.log('ERROR: trying to attack with an exhausted creature'); return false; }
+  if (summoningSickness) { console.log('ERROR: trying to attack with a summon sick creature'); return false; }
+  if (isPacific) { console.log('ERROR: trying to attack with a pacific creature'); return false; }
+
+  return true
+
 }
 
 

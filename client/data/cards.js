@@ -1,3 +1,6 @@
+import { adjacentCreatures, adjacentAllies } from '../engine/battle/battlefield'
+import { addModifier } from '../engine/battle/creature'
+
 export default {
   'Peasant': {
     type: 'creature',
@@ -7,7 +10,17 @@ export default {
     sp: 1,
     attackType: 'hp',
     attackValue: 1,
-    abilities: [],
+    abilities: [{
+        trigger: 'creatureMoved',
+        effect: (state, me, { creatureId }) => {
+            if(me.id !== creatureId) { return false }
+            const modifier = { type: 'sp', value: 1, until: null }
+            const targets = adjacentAllies(state, { ...me.pos, hero: me.controller })
+            _.forEach(targets, (c) => {
+                addModifier(state, { creatureId: c.id, modifier })
+            })
+        }
+    }],
     keywords: {},
   },
   'Knight of the Rose': {

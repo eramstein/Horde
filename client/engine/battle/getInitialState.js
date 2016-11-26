@@ -13,9 +13,19 @@ export default function (options) {
     creatures: {
       'cr-2100': {
         'id': 'cr-2100',
-        'name': 'Peasant',
+        'name': 'Peasant',        
         'damageHp': 0,
         'damageSp': 0,
+        'owner': 'opponent',
+        'controller': 'opponent',
+        'pos': {
+          'row': 3,
+          'column': 5
+        },
+        'hasMoved': 0,
+        'hasAttacked': 0,
+        'summonedOnTurn': 2,
+        'modifiers': [],
         'template': {
           'type': 'creature',
           'subtypes': ['human'],
@@ -26,73 +36,7 @@ export default function (options) {
           'attackValue': 1,
           'abilities': [],
           'keywords': {}
-        },
-        'owner': 'opponent',
-        'controller': 'opponent',
-        'pos': {
-          'row': 3,
-          'column': 5
-        },
-        'hasMoved': 0,
-        'hasAttacked': 0,
-        'summonedOnTurn': 2
-      },
-      'cr-2101': {
-        'id': 'cr-2101',
-        'name': 'Knight of the Rose',
-        'damageHp': 0,
-        'damageSp': 0,
-        'template': {
-          'type': 'creature',
-          'subtypes': ['human', 'soldier'],
-          'cost': 2,
-          'hp': 3,
-          'sp': 1,
-          'attackType': 'hp',
-          'attackValue': 1,
-          'abilities': [],
-          'keywords': {
-            'extraMoves': 1,
-            'haste': true
-          }
-        },
-        'owner': 'opponent',
-        'controller': 'opponent',
-        'pos': {
-          'row': 4,
-          'column': 5
-        },
-        'hasMoved': 0,
-        'hasAttacked': 0,
-        'summonedOnTurn': 2
-      },
-      'cr-3000': {
-        'id': 'cr-3000',
-        'name': 'Wall',
-        'damageHp': 0,
-        'damageSp': 0,
-        'template': {
-          'type': 'creature',
-          'subtypes': ['structure'],
-          'cost': 2,
-          'hp': 3,
-          'sp': 1,
-          'attackType': 'hp',
-          'attackValue': 1,
-          'abilities': [],
-          'keywords': {
-            'static': true
-          }
-        },
-        'owner': 'opponent',
-        'controller': 'opponent',
-        'pos': {
-          'row': 3,
-          'column': 6
-        },
-        'hasMoved': 0,
-        'hasAttacked': 0,
-        'summonedOnTurn': 2
+        },        
       },
     },
     graveyard: {},

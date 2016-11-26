@@ -1,10 +1,48 @@
+import { listener } from './listener'
+import cards from '../../data/cards'
 import { idPrefix } from '../config'
 import { isCellOccupied } from './battlefield'
-import cards from '../../data/cards'
+
 
 export const getCurrentState = function (state, creatureId) {
   const creature = state.creatures[creatureId]
-  return {
+
+  let hp = creature.template.hp
+  let sp = creature.template.sp
+  let attackValue = creature.template.attackValue
+  let keywords = creature.template.keywords
+  let abilities = creature.template.abilities
+
+  _.forEach(creature.modifiers, (m) => {
+    if(m.type === 'hp') {
+      hp += m.value
+    }
+    if(m.type === 'sp') {
+      sp += m.value
+    }
+    if(m.type === 'attackValue') {
+      attackValue += m.value
+    }
+    if(m.type === 'keyword') {
+      let currentVal = keywords[m.value.keyword]
+      if (currentVal) {
+        if (_.isNumber(currentVal)) {
+          currentVal =  currentVal + (m.value.val || 0)
+        } else {
+          currentVal = m.value.val
+        }
+      } else {
+        keywords[m.value.keyword] = m.value.val || true
+      }
+    }
+  })
+
+  return {    
+    hp,
+    sp,
+    attackValue,
+    abilities,
+    keywords,
     id:  creature.id,
     name:  creature.name,
     hasAttacked: creature.hasAttacked,
@@ -15,15 +53,11 @@ export const getCurrentState = function (state, creatureId) {
     owner:  creature.owner,
     pos:  creature.pos,
     summonedOnTurn:  creature.summonedOnTurn,
-    abilities: creature.template.abilities,
-    attackType: creature.template.attackType,
-    attackValue: creature.template.attackValue,
-    cost: creature.template.cost,
-    hp: creature.template.hp,
-    keywords: creature.template.keywords,
-    sp: creature.template.sp,
+    modifiers: creature.modifiers,    
+    attackType: creature.template.attackType,    
+    cost: creature.template.cost,           
     subtypes: creature.template.subtypes,
-    type: creature.template.type,
+    type: creature.template.type,    
   }
 }
 
@@ -35,6 +69,7 @@ export const summon = function (state, { creatureName, hero , cell }) {
   creatures[id] = {
     id,
     name: creatureName,
+    modifiers: [],
     template,
     owner: hero,
     controller: hero,
@@ -80,8 +115,15 @@ export const move = function (state, { creatureId, cell }) {
   if (summoningSickness) { console.log('ERROR: trying to move a summon sick creature'); return false; }
   
   // if move valid, do it
-
   creatures[creatureId].hasMoved++
   creatures[creatureId].pos = cell
   state.creatures = creatures
+
+  // triggers
+  listener(state, { trigger: 'creatureMoved', args: { creatureId, to: cell } })
+}
+
+
+export const addModifier = function (state, { creatureId, modifier }) {
+  state.creatures[creatureId].modifiers.push(modifier)
 }

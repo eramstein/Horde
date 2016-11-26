@@ -1,5 +1,5 @@
 <template>
-  <div class="hero">
+  <div class="hero" v-on:click="click">
     <div class="name">    
       {{ data.name }}
     </div>
@@ -19,7 +19,14 @@
 export default {
   props: ['data'],
   computed: {
-  }
+  },
+  methods: {
+    click: function (event) {
+      if (this.data.isOpponent) {
+        this.$store.dispatch('clickOpponent')
+      }      
+    }
+  },
 }
 </script>
 
@@ -54,7 +61,7 @@ export default {
     width: 22px;
     height: 24px; 
     text-align: center;
-    padding-top: 2px;
+    padding: 2px 3px 0px 3px;
     background-color: #00026F;
     margin-right: 6px;
   }

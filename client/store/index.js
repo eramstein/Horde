@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Game from './game'
-import cards from '../data/cards'
+import { setTemplates } from './templates'
 
 Vue.use(Vuex)
 
@@ -19,19 +19,6 @@ function saveState() {
 
 function setDefaultState() {
   localStorage.setItem('hordeSavedGame', JSON.stringify({}))
-}
-
-function setTemplates(state, add) {
-  _.forEach(state.game.battle.heroes.player.cards, (c) => {
-    c.template = add ? cards[c.name] : null
-  })
-  _.forEach(state.game.battle.heroes.opponent.cards, (c) => {
-    c.template = add ? cards[c.name] : null
-  })
-  _.forEach(state.game.battle.creatures, (c) => {
-    c.template = add ? cards[c.name] : null
-  })
-  return state
 }
 
 

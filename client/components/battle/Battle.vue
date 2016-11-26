@@ -19,8 +19,8 @@
     </div>
     <div class="column opponent">
       <Hero :data="opponent"></Hero>
-      <Card v-for="card in opponent.cards" :data="card"></Card>
-      <button v-on:click="clickTurnButton">Pass Turn</button>
+      <Card v-for="card in opponent.cards" :data="card"></Card>      
+      <button class="pass-turn" v-on:click="clickTurnButton">Pass Turn</button>       
     </div>    
   </div>
 </template>
@@ -55,7 +55,9 @@ export default {
         return this.$store.getters.player
     },
     opponent() {
-        return this.$store.getters.opponent
+        let opponent = this.$store.getters.opponent
+        opponent.isOpponent = true
+        return opponent
     },
   },
   methods: {
@@ -104,6 +106,14 @@ export default {
   .cells-center {
     width: 9%;
     border-right: 1px solid #ccc;
+  }
+  .pass-turn {
+    position: absolute;
+    bottom: 30px;
+    width: 145px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
   }
 }    
 </style>

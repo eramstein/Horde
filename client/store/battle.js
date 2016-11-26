@@ -2,8 +2,9 @@ import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
 
 import { playCard } from '../engine/battle/hand'
 import { move as moveCreature } from '../engine/battle/creature'
-import { attackCreature } from '../engine/battle/combat'
+import { attackCreature, attackOpponent } from '../engine/battle/combat'
 import { startTurn } from '../engine/battle/turn'
+import { setBattleTemplates } from './templates'
 
 const AI = new aiWorker
 
@@ -14,6 +15,7 @@ const mutations = {
   PLAY_CARD: playCard,
   MOVE_CREATURE: moveCreature,
   ATTACK_CREATURE: attackCreature,
+  ATTACK_OPPONENT: attackOpponent,
   START_TURN: startTurn,
   SELECT_CARD(state, { cardId }) {    
     state.ui.selectedCardId = state.ui.selectedCardId === cardId ? null : cardId
@@ -71,17 +73,25 @@ const actions = {
     } else {
     // else, select it
       commit('SELECT_CREATURE', { creatureId })
+    }    
+  },
+
+  clickOpponent({ commit, state }) {
+    const selectedCreatureId = state.ui.selectedCreatureId
+    if (state.creatures[selectedCreatureId] && 
+        state.creatures[selectedCreatureId].controller === 'player') {
+      commit('ATTACK_OPPONENT', { attackerCreatureId: selectedCreatureId })
     }
-    
   },
 
   clickTurnButton({ commit, state }) {
     // pass turn to AI
     commit('START_TURN', { hero: 'opponent' })
-    AI.postMessage(state)
+    AI.postMessage(JSON.parse(JSON.stringify(state)))
     // when AI is done
     AI.onmessage = function(e) {
-      commit('APPLY_AI_ACTIONS', e.data)
+      let newState = setBattleTemplates(e.data, true)
+      commit('APPLY_AI_ACTIONS', newState)
       // back to player
       commit('START_TURN', { hero: 'player' })
     }    

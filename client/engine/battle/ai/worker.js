@@ -1,9 +1,11 @@
 import { computeStateValue } from './computeStateValue'
+import { setBattleTemplates } from '../../../store/templates'
 
 onmessage = function(e) {
-  const initialState = e.data
+  console.log(e.data);
+  const initialState = setBattleTemplates(e.data, true)
   let newState = initialState
-  newState.graveyard = {a: 123}
   console.log('Message received from main script', e);
-  postMessage(newState)
+  postMessage(JSON.parse(JSON.stringify(newState)))
 }
+
