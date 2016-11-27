@@ -3,6 +3,7 @@ import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
 import { playCard } from '../engine/battle/hand'
 import { move as moveCreature } from '../engine/battle/creature'
 import { attackCreature, attackOpponent } from '../engine/battle/combat'
+import { targetCreature } from '../engine/battle/abilities'
 import { startTurn } from '../engine/battle/turn'
 import { setBattleTemplates } from './templates'
 
@@ -17,13 +18,19 @@ const mutations = {
   ATTACK_CREATURE: attackCreature,
   ATTACK_OPPONENT: attackOpponent,
   START_TURN: startTurn,
+  AA_TARGET_CREATURE: targetCreature,
   SELECT_CARD(state, { cardId }) {    
     state.ui.selectedCardId = state.ui.selectedCardId === cardId ? null : cardId
     state.ui.selectedCreatureId = null
+    state.ui.selectedAbilityId = null
+  },
+  SELECT_ABILITY(state, { creatureId, key }) {
+    state.ui.selectedAbilityId = key
   },
   SELECT_CREATURE(state, { creatureId }) {
     state.ui.selectedCreatureId = state.ui.selectedCreatureId === creatureId ? null : creatureId
     state.ui.selectedCardId = null
+    state.ui.selectedAbilityId = null
   },
   APPLY_AI_ACTIONS(state, newState) {
     // state = newState doesn't work (vuex doesn't work with changing root state)
@@ -65,12 +72,23 @@ const actions = {
 
   clickCreature({ commit, state }, { creatureId }) {
     const selectedCreatureId = state.ui.selectedCreatureId
-    // if a player's card was selected, and the target is an opponent's creature, attack it
-    if (state.creatures[selectedCreatureId] && 
-        state.creatures[selectedCreatureId].controller === 'player' && 
-        state.creatures[creatureId].controller === 'opponent') {
+    const selectedAbilityId = state.ui.selectedAbilityId
+    const selectedAbility = selectedCreatureId && selectedAbilityId !== null ? 
+      state.creatures[selectedCreatureId].abilities[selectedAbilityId]
+      : null;
+
+    // if an activated activity was selected and it targets creatures
+    if (selectedAbility &&
+      selectedAbility.targetType === 'creature') {
+      commit('AA_TARGET_CREATURE', { selectedCreatureId, selectedAbilityId, targetCreatureId: creatureId })
+    }
+    // if a player's creature was selected, and the target is an opponent's creature, attack it
+    else if (state.creatures[selectedCreatureId] && 
+      state.creatures[selectedCreatureId].controller === 'player' && 
+      state.creatures[creatureId].controller === 'opponent') {
       commit('ATTACK_CREATURE', { attackerCreatureId: selectedCreatureId, targetCreatureId: creatureId })
-    } else {
+    }    
+    else {
     // else, select it
       commit('SELECT_CREATURE', { creatureId })
     }    
@@ -82,6 +100,11 @@ const actions = {
         state.creatures[selectedCreatureId].controller === 'player') {
       commit('ATTACK_OPPONENT', { attackerCreatureId: selectedCreatureId })
     }
+  },
+
+  clickActivatedAbility({ commit, state }, { creatureId, key }) {
+    commit('SELECT_CREATURE', { creatureId })
+    commit('SELECT_ABILITY', { key })
   },
 
   clickTurnButton({ commit, state }) {
@@ -129,6 +152,7 @@ const getters = {
   opponent: state => state.heroes.opponent,
   selectedCardId: state => state.ui.selectedCardId,
   selectedCreatureId: state => state.ui.selectedCreatureId,
+  selectedAbilityId: state => state.ui.selectedAbilityId,
 }
 
 export default {
@@ -136,6 +160,7 @@ export default {
     ui: {
       selectedCardId: null,
       selectedCreatureId: null,
+      selectedAbilityId: null,
     },
     turn: 0,
     currentPlayer: '',

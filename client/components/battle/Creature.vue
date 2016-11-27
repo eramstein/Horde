@@ -8,6 +8,16 @@
       <div class="name">
         {{ data.name }} 
       </div>
+      <div 
+        v-bind:class="{ 'ability': true, 'activated': ability.trigger === 'activated', 'active': (key === selectedAbilityId) && isSelected }" 
+        v-for="(ability, key) in data.abilities"
+        v-on:click="clickAbility({ability, key})"
+        :data="ability">
+        <span v-if="ability.costValue">
+          {{ ability.costValue + ' ' + ability.costType + ':' }}
+        </span>
+        {{ ability.text }}
+      </div>
       <div class="wrapper">
         <div class="stats">
           <div class="pull-left">
@@ -44,10 +54,22 @@ export default {
     height() {
         return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
     },
+    selectedAbilityId() {
+        return this.$store.getters.selectedAbilityId
+    },
+    selectedCreatureId() {
+        return this.$store.getters.selectedCreatureId
+    },
   },
   methods: {
     click: function (event) {
+      if(event.target.className.indexOf('activated') >= 0) { return false; }
       this.$store.dispatch('clickCreature', { creatureId: this.data.id })
+    },
+    clickAbility: function ({ability, key}) {
+      if (ability.trigger === 'activated') {
+        this.$store.dispatch('clickActivatedAbility', { creatureId: this.data.id, key })
+      }      
     }
   },
 }
@@ -65,7 +87,17 @@ export default {
       text-align: center;
       font-weight: lighter;
       font-size: 25px;
-    } 
+    }
+    .ability {
+      padding: 2px 6px;
+    }
+    .activated:hover {
+      cursor: pointer;
+      background-color: #B2E7FF;
+    }
+    .active {
+      background-color: #FED087 !important;
+    }
     .stats {
       width: 100%;
       position: absolute;

@@ -57,6 +57,7 @@ export const canAttack = function (state, { attackerCreatureId }) {
   const exhausted = attacker.hasAttacked && !attacker.keywords.extraAttacks
     || attacker.keywords.extraAttacks && attacker.hasAttacked > attacker.keywords.extraAttacks
     || attacker.hasMoved && !attacker.keywords.attackAndMove
+    || thisCreature.exhausted
 
   const summoningSickness = 
     attacker.summonedOnTurn === state.turn && !attacker.keywords.haste

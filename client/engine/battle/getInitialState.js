@@ -5,6 +5,7 @@ export default function (options) {
     ui: {
       selectedCardId: null,
       selectedCreatureId: null,
+      selectedAbilityId: null,
     },
     turn: 1,
     currentPlayer: 'player',
@@ -17,6 +18,7 @@ export default function (options) {
         'hp': 2,
         'sp': 1,
         'attackValue': 1,
+        'attackType': 'hp',
         'type': 'creature',
         'subtypes': ['human'],
         'cost': 1,
@@ -28,6 +30,7 @@ export default function (options) {
           'row': 3,
           'column': 5
         },
+        'exhausted': false,
         'keywords': {},
         'hasMoved': 0,
         'hasAttacked': 0,
@@ -56,7 +59,7 @@ export default function (options) {
           }, 
           [idPrefix.PLAYER_CARDS + '3']: {
             id: idPrefix.PLAYER_CARDS + '3',
-            name: 'Wall',
+            name: 'Timz Tower',
             count: 1,
           }
         }

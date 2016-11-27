@@ -19,9 +19,18 @@ export const summon = function (state, { creatureName, hero , cell }) {
     pos: cell,
     hasMoved: 0,
     hasAttacked: 0,
-    summonedOnTurn: state.turn
+    summonedOnTurn: state.turn,
+    exhausted: false,
   }
   state.creatures = creatures
+}
+
+export const damage = function (state, { creatureId, damageValue, damageType }) {
+  const creature = state.creatures[creatureId]
+  creature[damageType] -= damageValue
+  if (creature.hp <= 0 || creature.sp <= 0) {
+    destroy(state, { creatureId })
+  }
 }
 
 export const destroy = function (state, { creatureId }) {
@@ -50,6 +59,7 @@ export const move = function (state, { creatureId, cell }) {
   const exhausted = thisCreature.hasMoved && !thisCreature.keywords.extraMoves
     || thisCreature.keywords.extraMoves && thisCreature.hasMoved > thisCreature.keywords.extraMoves
     || thisCreature.hasAttacked && !thisCreature.keywords.attackAndMove
+    || thisCreature.exhausted
 
   const summoningSickness = 
     thisCreature.summonedOnTurn === state.turn && !thisCreature.keywords.haste
@@ -73,7 +83,7 @@ export const addModifier = function (state, { creatureId, modifier }) {
   let creature = state.creatures[creatureId]
 
   modifier.id = 'modif-' + (Math.random() * 1000000000000) // lol
-console.log('add', modifier.id);
+
   creature.modifiers.push(modifier)
   
   if(modifier.type === 'hpMax') {

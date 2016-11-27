@@ -1,5 +1,5 @@
 import { adjacentCreatures, adjacentAllies } from '../engine/battle/battlefield'
-import { addModifier } from '../engine/battle/creature'
+import { addModifier, damage as damageCreature } from '../engine/battle/creature'
 
 export default {
   'Peasant': {
@@ -14,12 +14,13 @@ export default {
         trigger: 'creatureMoved',
         effect: (state, me, { creatureId }) => {
             if(me.id !== creatureId) { return false }
-            const modifier = { type: 'attackValue', value: 1, until: null }
+            const modifier = { type: 'attackValue', value: 1, until: 'eot' }
             const targets = adjacentAllies(state, { ...me.pos, hero: me.controller })
             _.forEach(targets, (c) => {
                 addModifier(state, { creatureId: c.id, modifier })
             })
-        }
+        },
+        text: 'After Move, +1 ATK to adj. allies until EOT'
     }],
     keywords: {},
   },
@@ -34,15 +35,25 @@ export default {
     abilities: [],
     keywords: { extraMoves: 1, haste: true },
   },
-  'Wall': {
+  'Timz Tower': {
     type: 'creature',
     subtypes: ['structure'],
     cost: 2,
     hpMax: 3,
-    spMax: 1,
+    spMax: 3,
     attackType: 'hp',
     attackValue: 1,
-    abilities: [],
+    abilities: [{
+        trigger: 'activated',
+        costType: 'sp',
+        costValue: 1,
+        targetType: 'creature',
+        exhausts: true,
+        effect: (state, me, { targetCreatureId }) => {
+            damageCreature(state, { creatureId: targetCreatureId, damageType: 'hp', damageValue: 1 })
+        },
+        text: 'Deal 1 HP damage to target creature'
+    }],
     keywords: { static: true, pacific: true },
   },
 }
