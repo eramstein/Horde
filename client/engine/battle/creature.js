@@ -20,7 +20,7 @@ export const summon = function (state, { creatureName, hero , cell }) {
     hasMoved: 0,
     hasAttacked: 0,
     summonedOnTurn: state.turn,
-    exhausted: false,
+    exhausted: true,
   }
   state.creatures = creatures
 }
@@ -44,17 +44,35 @@ export const destroy = function (state, { creatureId }) {
   state.graveyard = graveyard
 }
 
-export const move = function (state, { creatureId, cell }) {
+export const move = function (state, { creatureId, cell, skipChecks }) {
   const thisCreature = state.creatures[creatureId]
 
-  // is the move invalid ?
+  if (!skipChecks === true) {
+    // can the creature move ?
+    if (canMove(state, { creatureId }) === false) {
+      return false
+    }
+    // is the move invalid ?
+    const cellOccupied = isCellOccupied(state, cell)
+    const wrongColumn = thisCreature.controller === 'player' && cell.column > state.columnCount / 2
+      || thisCreature.controller === 'opponent' && cell.column <= state.columnCount / 2
+    if (cellOccupied) { console.log('ERROR: trying to move a creature to occupied cell'); return false; }
+    if (wrongColumn) { console.log('ERROR: trying to move to opponents board'); return false; }
+  }  
+  
+  // if move valid, do it
+  state.creatures[creatureId].hasMoved++
+  state.creatures[creatureId].pos = cell
 
-  const cellOccupied = isCellOccupied(state, cell)
+  // triggers
+  listener(state, { trigger: 'creatureMoved', args: { creatureId, to: cell } })
+}
+
+
+export const canMove = function (state, { creatureId }) {
+  const thisCreature = state.creatures[creatureId]
 
   const staticCreature = thisCreature.keywords.static
-
-  const wrongColumn = thisCreature.controller === 'player' && cell.column > state.columnCount / 2
-    || thisCreature.controller === 'opponent' && cell.column <= state.columnCount / 2
 
   const exhausted = thisCreature.hasMoved && !thisCreature.keywords.extraMoves
     || thisCreature.keywords.extraMoves && thisCreature.hasMoved > thisCreature.keywords.extraMoves
@@ -64,18 +82,16 @@ export const move = function (state, { creatureId, cell }) {
   const summoningSickness = 
     thisCreature.summonedOnTurn === state.turn && !thisCreature.keywords.haste
 
-  if (cellOccupied) { console.log('ERROR: trying to move a creature to occupied cell'); return false; }
+  const myCreaturesCount = _.filter(state.creatures, c => c.controller === state.currentPlayer).length
+  const cellCount = state.rowCount * state.columnCount
+  const nowhereToMove = myCreaturesCount >= cellCount
+
   if (staticCreature) { console.log('ERROR: trying to move a static creature'); return false; }
-  if (wrongColumn) { console.log('ERROR: trying to move to opponents board'); return false; }
   if (exhausted) { console.log('ERROR: trying to move an exhausted creature'); return false; }
   if (summoningSickness) { console.log('ERROR: trying to move a summon sick creature'); return false; }
+  if (nowhereToMove) { console.log('ERROR: trying to move a creature while there is no free cell'); return false; }
   
-  // if move valid, do it
-  state.creatures[creatureId].hasMoved++
-  state.creatures[creatureId].pos = cell
-
-  // triggers
-  listener(state, { trigger: 'creatureMoved', args: { creatureId, to: cell } })
+  return true
 }
 
 

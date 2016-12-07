@@ -15,7 +15,8 @@ export const canUseAbility = function (state, { selectedCreatureId, selectedAbil
   const creature = state.creatures[selectedCreatureId]
   const ability = creature.abilities[selectedAbilityId]
 
-  return !creature.exhausted || !ability.exhausts
+  return (!creature.exhausted || !ability.exhausts) &&
+    (creature.summonedOnTurn !== state.turn || creature.keywords.haste)
 }
 
 export const payAbilityCost = function (state, { selectedCreatureId, selectedAbilityId }) {

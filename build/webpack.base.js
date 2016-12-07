@@ -20,6 +20,7 @@ module.exports = {
       root: path.join(__dirname, '../client'),
       components: path.join(__dirname, '../client/components'),
       lodash: path.join(__dirname, '../node_modules/lodash'),
+      tween: path.join(__dirname, '../node_modules/tween'),
     }
   },
   module: {
@@ -60,7 +61,8 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-        '_': 'lodash'
+        '_': 'lodash',
+        'TWEEN': 'tween'
     }),
     new HtmlWebpackPlugin({
       title: config.title,

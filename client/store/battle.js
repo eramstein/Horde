@@ -3,7 +3,7 @@ import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
 import { playCard } from '../engine/battle/hand'
 import { move as moveCreature } from '../engine/battle/creature'
 import { attackCreature, attackOpponent } from '../engine/battle/combat'
-import { targetCreature } from '../engine/battle/abilities'
+import { targetCreature as abilityTargetCreature } from '../engine/battle/abilities'
 import { startTurn } from '../engine/battle/turn'
 import { setBattleTemplates } from './templates'
 
@@ -18,8 +18,8 @@ const mutations = {
   ATTACK_CREATURE: attackCreature,
   ATTACK_OPPONENT: attackOpponent,
   START_TURN: startTurn,
-  AA_TARGET_CREATURE: targetCreature,
-  SELECT_CARD(state, { cardId }) {    
+  AA_TARGET_CREATURE: abilityTargetCreature,
+  SELECT_CARD(state, { cardId }) {
     state.ui.selectedCardId = state.ui.selectedCardId === cardId ? null : cardId
     state.ui.selectedCreatureId = null
     state.ui.selectedAbilityId = null
@@ -37,6 +37,7 @@ const mutations = {
     _.forOwn(newState, function(value, key) {
       state[key] = value
     })
+    state.currentPlayer = 'player'
   },
 }
 
@@ -49,12 +50,16 @@ const actions = {
   clickCell({ commit, state }, { row, column }) {
     const selectedCardId = state.ui.selectedCardId
     const selectedCreatureId = state.ui.selectedCreatureId
+    const selectedCard = selectedCardId && state.heroes.player.cards[selectedCardId]
     // if a player's card was selected, play it on the target cell
-    if (selectedCardId && state.heroes.player.cards[selectedCardId]) {
+    if (selectedCard &&
+        (selectedCard.template.type === 'creature' || selectedCard.template.targetType === 'cell')
+      ) {
       commit('PLAY_CARD', {
         cardId: selectedCardId,
         target: { row, column },
         targetType: 'cell',
+        hero: 'player',
       })
     }
     // if a player's creature was selected, move it to the target cell
@@ -76,17 +81,39 @@ const actions = {
     const selectedAbility = selectedCreatureId && selectedAbilityId !== null ? 
       state.creatures[selectedCreatureId].abilities[selectedAbilityId]
       : null;
+    const selectedCardId = state.ui.selectedCardId
+    const selectedCard = selectedCardId && selectedCardId !== null ? 
+      state.heroes[state.currentPlayer].cards[selectedCardId]
+      : null;
 
     // if an activated activity was selected and it targets creatures
     if (selectedAbility &&
       selectedAbility.targetType === 'creature') {
-      commit('AA_TARGET_CREATURE', { selectedCreatureId, selectedAbilityId, targetCreatureId: creatureId })
+      commit('AA_TARGET_CREATURE', { 
+        selectedCreatureId, 
+        selectedAbilityId, 
+        targetCreatureId: creatureId 
+      })
+    }
+    // if a spell was selected and it targets creatures
+    else if (selectedCard &&
+      selectedCard.template.type === 'spell' &&
+      selectedCard.template.targetType === 'creature') {      
+      commit('PLAY_CARD', { 
+        cardId: selectedCardId, 
+        target: creatureId, 
+        targetType: 'creature',
+        hero: 'player',
+      })
     }
     // if a player's creature was selected, and the target is an opponent's creature, attack it
     else if (state.creatures[selectedCreatureId] && 
       state.creatures[selectedCreatureId].controller === 'player' && 
       state.creatures[creatureId].controller === 'opponent') {
-      commit('ATTACK_CREATURE', { attackerCreatureId: selectedCreatureId, targetCreatureId: creatureId })
+      commit('ATTACK_CREATURE', { 
+        attackerCreatureId: selectedCreatureId, 
+        targetCreatureId: creatureId 
+      })
     }    
     else {
     // else, select it

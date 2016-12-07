@@ -8,7 +8,7 @@
     </div>
     <div class="wrapper">
       <div class="mana-cost">{{ data.template.cost }}</div>
-      <div class="stats">
+      <div class="stats" v-if="data.template.type === 'creature'">
         <div class="hp round-box">{{ data.template.hpMax }}</div>
         <div class="sp round-box">{{ data.template.spMax }}</div>
         <div v-bind:class="{ atk: true, hp: data.template.attackType === 'hp', sp: data.template.attackType === 'sp' }">

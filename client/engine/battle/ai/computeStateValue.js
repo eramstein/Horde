@@ -1,3 +1,3 @@
-export const computeStateValue = function () {
-  console.log('computing state value');
+export const computeStateValue = function ({ initialState, newState }) {
+  return 1
 }

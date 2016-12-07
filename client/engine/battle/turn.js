@@ -24,6 +24,7 @@ export const refreshCreatures = function (state, { hero }) {
     .forEach((c) => {
       c.hasAttacked = 0
       c.hasMoved = 0
+      c.exhausted = false
     })
 }
 

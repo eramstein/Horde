@@ -23,3 +23,18 @@ export const adjacentAllies = function(state, { row, column, hero }) {
     .filter((c) => c.controller === hero)
 }
 
+export const getFreeCells = function (state, { side } ) {
+  const freeCells = []
+  const minCol = side === 'opponent' ? (state.columnCount/2 + 1) : 1
+  const maxCol = side === 'opponent' ? state.columnCount : state.columnCount/2
+
+  for (let i = 1; i <= state.rowCount; i++) {
+    for (let j = minCol; j <= maxCol; j++) {
+      if (!isCellOccupied(state, { row: i, column: j })) {
+        freeCells.push({ row: i, column: j })
+      }
+    }
+  }
+
+  return freeCells
+}

@@ -7,14 +7,14 @@
     <div class="column battlefield">
       <div class="column cells-container cells-hero">
         <Cell v-for="cell in playerCells" :data="cell"></Cell>
-        <Creature v-for="creature in playerCreatures" :data="creature"></Creature>
+        <Creature v-for="creature in playerCreatures" :data="creature" :key="creature.id"></Creature>
       </div>
       <div class="column cells-container cells-center">     
         
       </div>
       <div class="column cells-container cells-hero">     
         <Cell v-for="cell in opponentCells" :data="cell"></Cell>
-        <Creature v-for="creature in opponentCreatures" :data="creature"></Creature>
+        <Creature v-for="creature in opponentCreatures" :data="creature" :key="creature.id"></Creature>
       </div>      
     </div>
     <div class="column opponent">

@@ -16,7 +16,7 @@
         <span v-if="ability.costValue">
           {{ ability.costValue + ' ' + ability.costType + ':' }}
         </span>
-        {{ ability.text }}
+        {{ _.isFunction(ability.text) ? ability.text() : ability.text }}
       </div>
       <div class="wrapper">
         <div class="stats">
@@ -77,6 +77,7 @@ export default {
 
 <style>
 .creature {
+  transition: top 0.4s, left 0.4s, background-color 0.2s;
   position: absolute;
   border: 1px #666 solid;
   .cont {
