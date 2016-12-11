@@ -38,6 +38,7 @@ const mutations = {
       state[key] = value
     })
     state.currentPlayer = 'player'
+    state.ui.attackAnimation = null
   },
 }
 
@@ -140,7 +141,11 @@ const actions = {
     AI.postMessage(JSON.parse(JSON.stringify(state)))
     // when AI is done
     AI.onmessage = function(e) {
-      let newState = setBattleTemplates(e.data, true)
+      const newState = setBattleTemplates(e.data.newState, true)
+      const actions = e.data.actions
+      console.log(actions);
+      // stagger animations
+      // update state
       commit('APPLY_AI_ACTIONS', newState)
       // back to player
       commit('START_TURN', { hero: 'player' })
@@ -173,6 +178,7 @@ const getters = {
   opponentCreatures: (state) => {
     return _.filter(state.creatures, c => c.controller === 'opponent')
   },
+  creatures: state => state.creatures,
   columnCount: state => state.columnCount,
   rowCount: state => state.rowCount,
   player: state => state.heroes.player,
@@ -180,6 +186,7 @@ const getters = {
   selectedCardId: state => state.ui.selectedCardId,
   selectedCreatureId: state => state.ui.selectedCreatureId,
   selectedAbilityId: state => state.ui.selectedAbilityId,
+  attackAnimation: state => state.ui.attackAnimation,
 }
 
 export default {

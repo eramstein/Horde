@@ -1,6 +1,7 @@
 
 export const listener = function (state, {trigger, args}) {
-  _.forEach(state.creatures, (c) => {
+  // triggered abilities
+  _.forEach(state.creatures, (c) => {    
     if (state.creatures[c.id]) {
       _.forEach(state.creatures[c.id].abilities, (a) => {
         if (
@@ -13,4 +14,8 @@ export const listener = function (state, {trigger, args}) {
       })
     }    
   })
+  // animations
+  if (trigger === 'creatureAttacked') {
+    state.ui.attackAnimation = args
+  }
 }

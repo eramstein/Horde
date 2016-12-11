@@ -3,7 +3,7 @@ import { computeStateValue } from './computeStateValue'
 import { executeRandomActions } from './generateActions'
 import { setBattleTemplates } from '../../../store/templates'
 
-onmessage = function(e) {
+onmessage = function(e) {  
   const initialState = setBattleTemplates(e.data, true)
   let bestStateValue = 0
   let bestNewState = _.cloneDeep(initialState)
@@ -24,7 +24,8 @@ onmessage = function(e) {
       }
     }
   }
-  
-  postMessage(JSON.parse(JSON.stringify(bestNewState)))
+
+  const message = { newState: bestNewState, actions: bestActionsCourse }
+  postMessage(JSON.parse(JSON.stringify(message)))
 }
 

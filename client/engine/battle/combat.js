@@ -30,6 +30,9 @@ export const attackOpponent = function (state, { attackerCreatureId }) {
 
   attacker.hasAttacked++
   damageHero(state, { hero, damage: attacker.attackValue, sourceType: 'creature', source: attackerCreatureId })
+
+  // triggers
+  listener(state, { trigger: 'creatureAttacked', args: { attackerCreatureId, defenderHero: hero } })
 }
 
 export const dealCombatDamage = function (state, { attackerCreatureId, targetCreatureId }) {

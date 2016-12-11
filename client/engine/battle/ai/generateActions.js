@@ -34,6 +34,11 @@ const playCardFromHand = function (state, card) {
 }
 
 const useCreature = function (state, creatureId) {
+
+  const propensityToAttackHero = 3
+  const propensityToAttackCreature = 3
+  const propensityToMove = 1
+
   const creatureCanMove = canMove(state, { creatureId })
   const creatureCanAttack = canAttack(state, { attackerCreatureId: creatureId })
   let creatureAttackTargets = null
@@ -41,11 +46,29 @@ const useCreature = function (state, creatureId) {
     creatureAttackTargets = validAttackTargets(state, { attackerCreatureId: creatureId })
   }
 
+  let possibleActions = []
+
+  const addAction = (a) => () => { possibleActions.push(a) }
+
   if (creatureCanAttack && creatureAttackTargets.hero) {
+    _.times(propensityToAttackHero, addAction('attackHero'))
+  }
+
+  if (creatureCanAttack && creatureAttackTargets.creatures.length > 0) {
+    _.times(propensityToAttackCreature, addAction('attackCreature'))
+  }
+
+  if (creatureCanMove) {
+    _.times(propensityToMove, addAction('move'))
+  }
+  
+  const action = _.sample(possibleActions)
+
+  if (action === 'attackHero') {
     attackOpponent(state, { attackerCreatureId: creatureId })
-  } else if (creatureCanAttack && creatureAttackTargets.creatures.length > 0) {
+  } else if (action === 'attackCreature') {
     attackCreature(state, { attackerCreatureId: creatureId, targetCreatureId: creatureAttackTargets.creatures[0].id })
-  } else if (creatureCanMove) {
+  } else if (action === 'move') {
     moveCreature(state, creatureId)
   }  
 }

@@ -1,5 +1,6 @@
 <template>
   <div
+    v-bind:id="data.id"
     v-on:click="click"
     v-bind:class="{ creature: true, selected: isSelected }"
     v-bind:style="{ left: x + '%', top: y + '%', width: width + '%', height: height + '%' }"
@@ -43,22 +44,25 @@ export default {
       return this.$store.getters.selectedCreatureId === this.data.id
     },
     x() {
-        return Math.floor( ( (this.data.pos.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
+      return Math.floor( ( (this.data.pos.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
     },
     y() {
-        return Math.floor( (this.data.pos.row - 1) / (this.$store.getters.rowCount) * 100)
+      return Math.floor( (this.data.pos.row - 1) / (this.$store.getters.rowCount) * 100)
     },
     width() {
-        return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
+      return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
     },
     height() {
-        return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
+      return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
     },
     selectedAbilityId() {
-        return this.$store.getters.selectedAbilityId
+      return this.$store.getters.selectedAbilityId
     },
     selectedCreatureId() {
-        return this.$store.getters.selectedCreatureId
+      return this.$store.getters.selectedCreatureId
+    },
+    attackAnimation() {
+      return this.$store.getters.attackAnimation
     },
   },
   methods: {
@@ -72,6 +76,53 @@ export default {
       }      
     }
   },
+  watch: {
+    attackAnimation: function(newValue, oldValue) {
+      if (newValue && newValue.attackerCreatureId === this.data.id) {      
+        const el = document.getElementById(this.data.id)
+        const oldPos = { x: this.x, y: this.y }
+        let diffPos = { x: 0, y: 0 }
+        const attackerCreature = this.$store.getters.creatures[newValue.attackerCreatureId]
+        const attackerCreaturePos = attackerCreature.pos
+        const attackerCreatureController = attackerCreature.controller
+        let midSpaceSize = 9 // warn: magic number! should fit with battle.vue css
+
+        if (attackerCreatureController === 'opponent') {
+          midSpaceSize = -midSpaceSize
+        }
+        
+        if (newValue.defenderCreatureId) {          
+          const targetCreaturePos = this.$store.getters.creatures[newValue.defenderCreatureId].pos
+          diffPos = { 
+            x: targetCreaturePos.column - attackerCreaturePos.column,
+            y: targetCreaturePos.row - attackerCreaturePos.row,
+          }
+        } else {
+          if (newValue.defenderHero === 'player') {
+            diffPos = { 
+              x: 0 - attackerCreaturePos.column,
+              y: 0,
+            }
+          } else {
+            diffPos = { 
+              x: this.$store.getters.columnCount - attackerCreaturePos.column,
+              y: 0,
+            }
+          }
+        }
+
+        const colSize = 100 / (this.$store.getters.columnCount / 2)
+        el.style.left = (oldPos.x + (diffPos.x * colSize) + midSpaceSize) + '%'
+        el.style.top = (oldPos.y + (diffPos.y * colSize)) + '%'
+
+        setTimeout( () => {
+          el.style.left = oldPos.x + '%'
+          el.style.top = oldPos.y + '%'
+        }, 450)
+
+      }
+    }
+  }
 }
 </script>
 
