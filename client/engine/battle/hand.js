@@ -38,6 +38,8 @@ export const playCard = function(state, { cardId, target, targetType, hero }) {
     hero,
   })
 
+  return true
+
 }
 
 export const decrementCard = function(state, { cardId, hero }) {

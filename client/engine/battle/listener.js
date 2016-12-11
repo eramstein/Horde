@@ -16,6 +16,9 @@ export const listener = function (state, {trigger, args}) {
   })
   // animations
   if (trigger === 'creatureAttacked') {
-    state.ui.attackAnimation = args
+    state.ui.attackAnimation = {
+      ...args,
+      targetCreaturePos: args.defenderCreatureId && state.creatures[args.defenderCreatureId].pos
+    }
   }
 }

@@ -6,26 +6,25 @@ import { setBattleTemplates } from '../../../store/templates'
 onmessage = function(e) {  
   const initialState = setBattleTemplates(e.data, true)
   let bestStateValue = 0
-  let bestNewState = _.cloneDeep(initialState)
-  let bestActionsCourse = []
+  let bestStateSequence = []
 
-  let { lethalState, lethalActions } = findLethal()
+  let lethalStateSequence = findLethal()
 
-  if (lethalState) {
-    bestNewState = lethalState
-    bestActionsCourse = lethalActions
+  if (lethalStateSequence) {
+    bestNewState = lethalStateSequence
   } else {
     for (let i = 0; i < 1; i++) {
       const stateToUse = _.cloneDeep(initialState)
-      const { actions, tempState } = executeRandomActions(stateToUse)
-      if (computeStateValue(initialState, tempState) > bestStateValue) {
-        bestNewState = tempState
-        bestActionsCourse = actions
+      const stateSequence = executeRandomActions(stateToUse)
+      const finalState = stateSequence[stateSequence.length]
+      const finalStateValue = computeStateValue(initialState, finalState || initialState)
+      if (finalStateValue > bestStateValue) {
+        bestStateSequence = stateSequence
+        bestStateValue = finalStateValue
       }
     }
   }
 
-  const message = { newState: bestNewState, actions: bestActionsCourse }
-  postMessage(JSON.parse(JSON.stringify(message)))
+  postMessage(JSON.parse(JSON.stringify( bestStateSequence )))
 }
 

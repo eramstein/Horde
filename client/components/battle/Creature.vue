@@ -78,7 +78,9 @@ export default {
   },
   watch: {
     attackAnimation: function(newValue, oldValue) {
-      if (newValue && newValue.attackerCreatureId === this.data.id) {      
+      const newAttacker = newValue && newValue.attackerCreatureId || null
+      const previousAttacker = oldValue && oldValue.attackerCreatureId || null
+      if (newAttacker && newAttacker === this.data.id && newAttacker !== previousAttacker) {
         const el = document.getElementById(this.data.id)
         const oldPos = { x: this.x, y: this.y }
         let diffPos = { x: 0, y: 0 }
@@ -91,11 +93,10 @@ export default {
           midSpaceSize = -midSpaceSize
         }
         
-        if (newValue.defenderCreatureId) {          
-          const targetCreaturePos = this.$store.getters.creatures[newValue.defenderCreatureId].pos
+        if (newValue.targetCreaturePos) {
           diffPos = { 
-            x: targetCreaturePos.column - attackerCreaturePos.column,
-            y: targetCreaturePos.row - attackerCreaturePos.row,
+            x: newValue.targetCreaturePos.column - attackerCreaturePos.column,
+            y: newValue.targetCreaturePos.row - attackerCreaturePos.row,
           }
         } else {
           if (newValue.defenderHero === 'player') {

@@ -11,7 +11,7 @@ export const damageHero = function (state, { hero, damage, sourceType, source })
 
 export const killHero = function (state, { hero }) {
   if (hero === 'player') {
-    console.log('you lose, booooo')
+    //console.log('you lose, booooo')
   } else {
     console.log('you win, yaaayyy')
   }  

@@ -10,11 +10,12 @@ export const attackCreature = function (state, { attackerCreatureId, targetCreat
   const invalidTarget = !isValidAttackTarget(state, { attackerCreatureId, targetCreatureId })
   if (invalidTarget) { console.log('ERROR: invalid attack target'); return false; }
 
-  state.creatures[attackerCreatureId].hasAttacked++
-  dealCombatDamage(state, { attackerCreatureId, targetCreatureId })
-
   // triggers
   listener(state, { trigger: 'creatureAttacked', args: { attackerCreatureId, defenderCreatureId: targetCreatureId } })
+
+  // state change
+  state.creatures[attackerCreatureId].hasAttacked++
+  dealCombatDamage(state, { attackerCreatureId, targetCreatureId })  
 
 }
 
@@ -28,11 +29,13 @@ export const attackOpponent = function (state, { attackerCreatureId }) {
   const creatureCanAttackHero = canAttackHero(state, { attackerCreatureId })
   if (!creatureCanAttackHero) { return false; }
 
-  attacker.hasAttacked++
-  damageHero(state, { hero, damage: attacker.attackValue, sourceType: 'creature', source: attackerCreatureId })
-
   // triggers
   listener(state, { trigger: 'creatureAttacked', args: { attackerCreatureId, defenderHero: hero } })
+
+  // state change
+  attacker.hasAttacked++
+  damageHero(state, { hero, damage: attacker.attackValue, sourceType: 'creature', source: attackerCreatureId })
+  
 }
 
 export const dealCombatDamage = function (state, { attackerCreatureId, targetCreatureId }) {

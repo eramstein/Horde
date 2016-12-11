@@ -6,31 +6,43 @@ import { playCard } from '../hand'
 export const executeRandomActions = function(state) {
 
   let tempState = _.cloneDeep(state)
-  let actions = []
+  let stateSequence = []
 
   // play cards by decreasing cost
   let cards = _.sortBy(tempState.heroes.opponent.cards, 
     [function(c) { return c.template.cost }]
   )
-  _.forEach(cards, c => playCardFromHand(tempState, c) )
+  _.forEach(cards, c => {    
+    const cardWasPlayed = playCardFromHand(tempState, c)
+    if (cardWasPlayed) {
+      stateSequence.push(_.cloneDeep(tempState))
+    }    
+  })
 
   // use creatures
   let creatures = _.filter(tempState.creatures, c => c.controller === 'opponent')
   creatures = _.shuffle(creatures)
-  _.forEach(creatures, c => useCreature(tempState, c.id) )
+  _.forEach(creatures, c => {
+    const action = useCreature(tempState, c.id)
+    if (action) {
+      if (action.indexOf('attack') < 0) {
+        tempState.ui.attackAnimation = null
+      }
+      stateSequence.push(_.cloneDeep(tempState))
+    }    
+  })
 
-  return {
-    actions,
-    tempState,
-  }
+  return stateSequence
 }
 
 const playCardFromHand = function (state, card) {
+  let cardWasPlayed = false
   if (card.template.type === 'creature') {
     const freeCells = getFreeCells(state, { side: 'opponent' })
     const cell = _.sample(freeCells)
-    playCard (state, { cardId: card.id, target: cell, targetType: 'cell', hero: 'opponent' })
+    cardWasPlayed = playCard (state, { cardId: card.id, target: cell, targetType: 'cell', hero: 'opponent' })
   }
+  return cardWasPlayed
 }
 
 const useCreature = function (state, creatureId) {
@@ -70,7 +82,9 @@ const useCreature = function (state, creatureId) {
     attackCreature(state, { attackerCreatureId: creatureId, targetCreatureId: creatureAttackTargets.creatures[0].id })
   } else if (action === 'move') {
     moveCreature(state, creatureId)
-  }  
+  }
+
+  return action
 }
 
 const moveCreature = function (state, creatureId) {

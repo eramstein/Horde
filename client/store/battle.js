@@ -36,9 +36,7 @@ const mutations = {
     // state = newState doesn't work (vuex doesn't work with changing root state)
     _.forOwn(newState, function(value, key) {
       state[key] = value
-    })
-    state.currentPlayer = 'player'
-    state.ui.attackAnimation = null
+    })    
   },
 }
 
@@ -141,14 +139,19 @@ const actions = {
     AI.postMessage(JSON.parse(JSON.stringify(state)))
     // when AI is done
     AI.onmessage = function(e) {
-      const newState = setBattleTemplates(e.data.newState, true)
-      const actions = e.data.actions
-      console.log(actions);
-      // stagger animations
-      // update state
-      commit('APPLY_AI_ACTIONS', newState)
+      const aiStateSequence = e.data
+      // update state action by action
+      _.forEach(aiStateSequence, (newState, i) => {
+        newState = setBattleTemplates(newState, true)
+        setTimeout(() => {
+          commit('APPLY_AI_ACTIONS', newState)
+        }, i * 1000)        
+      })      
       // back to player
-      commit('START_TURN', { hero: 'player' })
+      setTimeout(() => {
+          commit('START_TURN', { hero: 'player' })
+      }, (aiStateSequence.length) * 1000)
+      
     }    
   },
 }
