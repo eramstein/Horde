@@ -3,7 +3,12 @@ import { cancelModifier } from './creature'
 export const startTurn = function (state, { hero }) {
   clearEndOfTurnModifiers(state)
   state.currentPlayer = hero
-  state.ui.attackAnimation = null
+  state.ui = {
+    selectedCardId: null,
+    selectedCreatureId: null,
+    selectedAbilityId: null,
+    attackAnimation: null,
+  }
   incrementMana(state, { hero, count: 1 })
   replenishMana(state, { hero })
   refreshCreatures(state, { hero })

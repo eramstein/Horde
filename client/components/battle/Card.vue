@@ -69,7 +69,7 @@ export default {
       padding-top: 2px;            
     }
     .sp {
-      background-color: #19840c;
+      background-color: #4D96FB;
       color: white;
     }
     .hp {
@@ -86,6 +86,10 @@ export default {
       padding-top: 2px;     
     }
   }  
-} 
+}
+
+.card:hover {
+  background-color: #f3f3f3;
+}
   
 </style>

@@ -14,9 +14,10 @@
         v-for="(ability, key) in data.abilities"
         v-on:click="clickAbility({ability, key})"
         :data="ability">
-        <span v-if="ability.costValue">
-          {{ ability.costValue + ' ' + ability.costType + ':' }}
-        </span>
+        <div v-bind:class="{ 'round-box': true, 'sp': ability.costType === 'sp', 'hp': ability.costType === 'hp' }" 
+             v-if="ability.costValue">
+          {{ ability.costValue }}
+        </div>
         {{ _.isFunction(ability.text) ? ability.text() : ability.text }}
       </div>
       <div class="wrapper">
@@ -77,6 +78,26 @@ export default {
     }
   },
   watch: {
+    'data.hp': function(newValue, oldValue) {
+      console.log(newValue);
+      const el = document.getElementById(this.data.id)
+      const color = newValue > oldValue ? '#8AE08A' : '#ED7855'
+      el.style.backgroundColor = color
+      setTimeout( () => {
+        el.style.backgroundColor = null
+      }, 450)
+
+    },
+    'data.sp': function(newValue, oldValue) {
+      console.log(newValue);
+      const el = document.getElementById(this.data.id)
+      const color = newValue > oldValue ? '#8AE08A' : '#8DBDFF'
+      el.style.backgroundColor = color
+      setTimeout( () => {
+        el.style.backgroundColor = null
+      }, 450)
+
+    },
     attackAnimation: function(newValue, oldValue) {
       const newAttacker = newValue && newValue.attackerCreatureId || null
       const previousAttacker = oldValue && oldValue.attackerCreatureId || null
@@ -128,28 +149,67 @@ export default {
 </script>
 
 <style>
+
+/* these transitions are added by transition-group in Battle.vue */
+.player-creatures-enter {
+  left: -50% !important;
+}
+
+.player-creatures-leave-active {
+  left: -200% !important;
+}
+
+.opponent-creatures-enter {
+  left: 150% !important;
+}
+
+.opponent-creatures-leave-active {
+  left: 300% !important;
+}
+
 .creature {
   transition: top 0.4s, left 0.4s, background-color 0.2s;
   position: absolute;
   border: 1px #666 solid;
+  z-index: 50;
   .cont {
     position: relative;
     height: 100%;
     .name {
       padding-top: 10px;
+      padding-bottom: 10px;
       text-align: center;
       font-weight: lighter;
       font-size: 25px;
     }
     .ability {
       padding: 2px 6px;
+      .round-box {
+        margin-right: 5px;
+      }
     }
     .activated:hover {
       cursor: pointer;
-      background-color: #B2E7FF;
+      background-color: #ddd;
     }
     .active {
       background-color: #FED087 !important;
+    }
+    .round-box {
+      float: left;
+      text-align: center;
+      width: 22px;
+      height: 20px;
+      border-radius: 50%;      
+      padding-top: 2px;            
+    }
+    .sp {
+      background-color: #4D96FB;
+      color: white;
+    }
+    .hp {
+      background-color: #ec4411;
+      color: white;
     }
     .stats {
       width: 100%;
@@ -160,23 +220,7 @@ export default {
       div {    
         font-weight: bold;
         margin-left: 3px;
-      }
-      .round-box {
-        float: left;
-        text-align: center;
-        width: 22px;
-        height: 20px;
-        border-radius: 50%;      
-        padding-top: 2px;            
-      }
-      .sp {
-        background-color: #19840c;
-        color: white;
-      }
-      .hp {
-        background-color: #ec4411;
-        color: white;
-      }
+      }      
       .atk {
         margin-left: 6px;
         margin-right: 5px;
@@ -188,6 +232,10 @@ export default {
       }
     } 
   }  
-} 
+}
+
+.creature:hover {
+  background-color: #f3f3f3;
+}
   
 </style>

@@ -6,6 +6,8 @@
 
 <style>
 body {
+  cursor:default;
+  user-select: none;
   background-color: #fafafa;
   margin: 0;
   overflow: hidden;

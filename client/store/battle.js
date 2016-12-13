@@ -38,6 +38,11 @@ const mutations = {
       state[key] = value
     })    
   },
+  UNSELECT(state) {
+    state.ui.selectedCreatureId = null
+    state.ui.selectedCardId = null
+    state.ui.selectedAbilityId = null
+  },
 }
 
 
@@ -60,6 +65,7 @@ const actions = {
         targetType: 'cell',
         hero: 'player',
       })
+      commit('UNSELECT')
     }
     // if a player's creature was selected, move it to the target cell
     if (selectedCreatureId && state.creatures[selectedCreatureId].controller === 'player') {
@@ -67,6 +73,7 @@ const actions = {
         creatureId: selectedCreatureId,
         cell: { row, column },
       })
+      commit('UNSELECT')
     }
   },
 
@@ -93,6 +100,7 @@ const actions = {
         selectedAbilityId, 
         targetCreatureId: creatureId 
       })
+      commit('UNSELECT')
     }
     // if a spell was selected and it targets creatures
     else if (selectedCard &&
@@ -104,6 +112,7 @@ const actions = {
         targetType: 'creature',
         hero: 'player',
       })
+      commit('UNSELECT')
     }
     // if a player's creature was selected, and the target is an opponent's creature, attack it
     else if (state.creatures[selectedCreatureId] && 
@@ -113,11 +122,12 @@ const actions = {
         attackerCreatureId: selectedCreatureId, 
         targetCreatureId: creatureId 
       })
+      commit('UNSELECT')
     }    
     else {
     // else, select it
       commit('SELECT_CREATURE', { creatureId })
-    }    
+    }
   },
 
   clickOpponent({ commit, state }) {
@@ -125,6 +135,7 @@ const actions = {
     if (state.creatures[selectedCreatureId] && 
         state.creatures[selectedCreatureId].controller === 'player') {
       commit('ATTACK_OPPONENT', { attackerCreatureId: selectedCreatureId })
+      commit('UNSELECT')
     }
   },
 
@@ -186,6 +197,7 @@ const getters = {
   rowCount: state => state.rowCount,
   player: state => state.heroes.player,
   opponent: state => state.heroes.opponent,
+  currentPlayer: state => state.currentPlayer,
   selectedCardId: state => state.ui.selectedCardId,
   selectedCreatureId: state => state.ui.selectedCreatureId,
   selectedAbilityId: state => state.ui.selectedAbilityId,

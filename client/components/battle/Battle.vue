@@ -1,4 +1,4 @@
-<template>
+'<template>
   <div class="game-container">
     <div class="column player">      
       <Hero :data="player"></Hero>
@@ -7,20 +7,28 @@
     <div class="column battlefield">
       <div class="column cells-container cells-hero">
         <Cell v-for="cell in playerCells" :data="cell"></Cell>
-        <Creature v-for="creature in playerCreatures" :data="creature" :key="creature.id"></Creature>
+        <transition-group name="player-creatures" tag="div">
+          <Creature v-for="creature in playerCreatures" :data="creature" :key="creature.id"></Creature>
+        </transition-group>
       </div>
       <div class="column cells-container cells-center">     
         
       </div>
       <div class="column cells-container cells-hero">     
         <Cell v-for="cell in opponentCells" :data="cell"></Cell>
-        <Creature v-for="creature in opponentCreatures" :data="creature" :key="creature.id"></Creature>
+        <transition-group name="opponent-creatures" tag="div">
+          <Creature v-for="creature in opponentCreatures" :data="creature" :key="creature.id"></Creature>
+        </transition-group>
       </div>      
     </div>
-    <div class="column opponent">
+    <div class="column opponent" v-bind:class="{ 'active-player': currentPlayer === 'opponent' }">
       <Hero :data="opponent"></Hero>
       <Card v-for="card in opponent.cards" :data="card"></Card>      
-      <button class="pass-turn" v-on:click="clickTurnButton">Pass Turn</button>       
+      <button class="pass-turn"
+        v-bind:disabled="currentPlayer === 'opponent'"
+        v-on:click="clickTurnButton">
+        Pass Turn
+      </button>       
     </div>    
   </div>
 </template>
@@ -59,6 +67,9 @@ export default {
         opponent.isOpponent = true
         return opponent
     },
+    currentPlayer() {
+        return this.$store.getters.currentPlayer
+    },
   },
   methods: {
     clickTurnButton: function (event) {
@@ -71,7 +82,7 @@ export default {
 <style>
 
 .selected {
-  background-color: #E0FCFF;
+  background-color: #ddd !important;
 }
 
 .game-container {
@@ -79,11 +90,16 @@ export default {
 
   .column {
     float: left;
-    height: 100vh;
+    height: 100vh;    
+  }
+  .active-player {
+    background-color: #DEDEDE !important;
   }
   .player, .opponent {
     width: 10%;
     background-color: #eeeeee;
+    z-index: 100;
+    position: relative;
   }
   .player {
     margin-right: 1%;
