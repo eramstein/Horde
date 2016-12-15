@@ -29,5 +29,6 @@ setTimeout(() => {
     position: absolute;
     top: 50px;
     left: 300px;
+    z-index: 1000;
   }
 </style>

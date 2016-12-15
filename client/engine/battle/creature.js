@@ -20,7 +20,7 @@ export const summon = function (state, { creatureName, hero , cell }) {
     hasMoved: 0,
     hasAttacked: 0,
     summonedOnTurn: state.turn,
-    exhausted: true,
+    exhausted: false,
   }
   state.creatures = creatures
 }

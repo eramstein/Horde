@@ -5,16 +5,27 @@
     v-bind:class="{ creature: true, selected: isSelected }"
     v-bind:style="{ left: x + '%', top: y + '%', width: width + '%', height: height + '%' }"
   >
-    <div class="cont">
+    <div v-bind:class="{ cont: true, exhausted: cannotDoAnything }">
+      <div v-if="isSummoningSick" class="sleeping">
+        zzz
+      </div>
       <div class="name">
         {{ data.name }} 
       </div>
+      <div class="wrapper keywords">
+        <Keyword v-for="(keyword, key) in data.keywords" :data="{ key, keyword }"></Keyword>
+      </div>
       <div 
-        v-bind:class="{ 'ability': true, 'activated': ability.trigger === 'activated', 'active': (key === selectedAbilityId) && isSelected }" 
+        v-bind:class="{ 'ability': true, 
+                        'activated': ability.trigger === 'activated', 
+                        'active': (key === selectedAbilityId) && isSelected }" 
         v-for="(ability, key) in data.abilities"
         v-on:click="clickAbility({ability, key})"
         :data="ability">
-        <div v-bind:class="{ 'round-box': true, 'sp': ability.costType === 'sp', 'hp': ability.costType === 'hp' }" 
+        <div v-bind:class="{ 'round-box': true, 
+                             'sp': ability.costType === 'sp', 
+                             'hp': ability.costType === 'hp', 
+                             'tap': ability.exhausts === true }" 
              v-if="ability.costValue">
           {{ ability.costValue }}
         </div>
@@ -36,9 +47,14 @@
 </template>
 
 <script>
-
+import { canMove } from '../../engine/battle/creature'
+import { canAttack } from '../../engine/battle/combat'
+import Keyword from './Keyword'
 
 export default {
+  components: {
+    Keyword,
+  },
   props: ['data'],
   computed: {
     isSelected: function () {
@@ -65,6 +81,27 @@ export default {
     attackAnimation() {
       return this.$store.getters.attackAnimation
     },
+    isSummoningSick() {
+      return this.data.summonedOnTurn === this.$store.getters.turn && !this.data.keywords.haste
+    },
+    cannotDoAnything() {
+      const state = this.$store.state.game.battle
+      if (
+        this.data.controller === this.$store.getters.currentPlayer &&
+        (this.data.exhausted
+          || this.isSummoningSick
+          || canMove(state, {creatureId: this.data.id }) === false
+            && canAttack(state, {attackerCreatureId: this.data.id }) === false
+            && _.filter(this.data.abilities, a => 
+                a.trigger === 'activated' && this.data[a.costType] > a.costValue
+              ).length === 0
+        )
+      ) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   methods: {
     click: function (event) {
@@ -79,7 +116,6 @@ export default {
   },
   watch: {
     'data.hp': function(newValue, oldValue) {
-      console.log(newValue);
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#ED7855'
       el.style.backgroundColor = color
@@ -89,7 +125,6 @@ export default {
 
     },
     'data.sp': function(newValue, oldValue) {
-      console.log(newValue);
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#8DBDFF'
       el.style.backgroundColor = color
@@ -172,6 +207,9 @@ export default {
   position: absolute;
   border: 1px #666 solid;
   z-index: 50;
+  .exhausted {
+    color: #ddd;
+  }
   .cont {
     position: relative;
     height: 100%;
@@ -182,10 +220,22 @@ export default {
       font-weight: lighter;
       font-size: 25px;
     }
+    .sleeping {
+      position: absolute;
+      top: 2px;
+      right: 5px;
+      color: #4D96FB;
+    }
+    .keywords {
+      padding: 0px 0px 10px 10px;
+    }
     .ability {
       padding: 2px 6px;
       .round-box {
         margin-right: 5px;
+      }
+      .tap {
+        border: 2px #222 solid;
       }
     }
     .activated:hover {

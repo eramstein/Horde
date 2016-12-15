@@ -5,7 +5,7 @@ import { setBattleTemplates } from '../../../store/templates'
 
 onmessage = function(e) {  
   const initialState = setBattleTemplates(e.data, true)
-  let bestStateValue = 0
+  let bestStateValue = -Infinity
   let bestStateSequence = []
 
   let lethalStateSequence = findLethal()
@@ -13,18 +13,17 @@ onmessage = function(e) {
   if (lethalStateSequence) {
     bestNewState = lethalStateSequence
   } else {
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 200; i++) {
       const stateToUse = _.cloneDeep(initialState)
       const stateSequence = executeRandomActions(stateToUse)
-      const finalState = stateSequence[stateSequence.length]
-      const finalStateValue = computeStateValue(initialState, finalState || initialState)
+      const finalState = stateSequence[stateSequence.length - 1]
+      const finalStateValue = computeStateValue(finalState || initialState)
       if (finalStateValue > bestStateValue) {
         bestStateSequence = stateSequence
         bestStateValue = finalStateValue
       }
     }
   }
-
   postMessage(JSON.parse(JSON.stringify( bestStateSequence )))
 }
 

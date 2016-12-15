@@ -26,6 +26,9 @@ export const payAbilityCost = function (state, { selectedCreatureId, selectedAbi
   if (ability.costValue) {
     if (creature[ability.costType] > ability.costValue) {
       creature[ability.costType] -= ability.costValue
+      if (ability.exhausts) {
+        creature.exhausted = true
+      }
     } else {
       console.log('ERROR: cannot pay for that ability'); 
       return false;

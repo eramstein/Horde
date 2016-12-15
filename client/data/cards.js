@@ -33,7 +33,7 @@ export default {
     attackType: 'hp',
     attackValue: 1,
     abilities: [],
-    keywords: { extraMoves: 1, haste: true },
+    keywords: { attackAndMove: true, haste: true },
   },
   'Wall of Pikes': {
     type: 'creature',

@@ -202,6 +202,7 @@ const getters = {
   selectedCreatureId: state => state.ui.selectedCreatureId,
   selectedAbilityId: state => state.ui.selectedAbilityId,
   attackAnimation: state => state.ui.attackAnimation,
+  turn: state => state.turn,
 }
 
 export default {
