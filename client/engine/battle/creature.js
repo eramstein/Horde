@@ -56,8 +56,8 @@ export const move = function (state, { creatureId, cell, skipChecks }) {
     const cellOccupied = isCellOccupied(state, cell)
     const wrongColumn = thisCreature.controller === 'player' && cell.column > state.columnCount / 2
       || thisCreature.controller === 'opponent' && cell.column <= state.columnCount / 2
-    if (cellOccupied) { console.log('ERROR: trying to move a creature to occupied cell'); return false; }
-    if (wrongColumn) { console.log('ERROR: trying to move to opponents board'); return false; }
+    if (cellOccupied) { return false; }
+    if (wrongColumn) { return false; }
   }  
   
   // if move valid, do it
@@ -86,10 +86,10 @@ export const canMove = function (state, { creatureId }) {
   const cellCount = state.rowCount * state.columnCount
   const nowhereToMove = myCreaturesCount >= cellCount
 
-  if (staticCreature) { console.log('ERROR: trying to move a static creature'); return false; }
-  if (exhausted) { console.log('ERROR: trying to move an exhausted creature'); return false; }
-  if (summoningSickness) { console.log('ERROR: trying to move a summon sick creature'); return false; }
-  if (nowhereToMove) { console.log('ERROR: trying to move a creature while there is no free cell'); return false; }
+  if (staticCreature) { return false; }
+  if (exhausted) { return false; }
+  if (summoningSickness) { return false; }
+  if (nowhereToMove) { return false; }
   
   return true
 }

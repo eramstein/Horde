@@ -13,6 +13,6 @@ export const killHero = function (state, { hero }) {
   if (hero === 'player') {
     //console.log('you lose, booooo')
   } else {
-    console.log('you win, yaaayyy')
+    //console.log('you win, yaaayyy')
   }  
 }

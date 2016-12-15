@@ -7,8 +7,8 @@ export const playCard = function(state, { cardId, target, targetType, hero }) {
 
   const card = state.heroes[hero].cards[cardId]
 
-  if(card.count <=  0) { console.log('ERROR: trying to play card with count <=0'); return false; }
-  if(state.heroes[hero].mana <  card.template.cost) { console.log('ERROR: trying to play card without enough mana'); return false; }
+  if(card.count <=  0) { return false; }
+  if(state.heroes[hero].mana <  card.template.cost) { return false; }
 
   if (card.template.type === 'creature' && targetType === 'cell') {
     if (!isCellOccupied(state, target)) {      
@@ -18,7 +18,7 @@ export const playCard = function(state, { cardId, target, targetType, hero }) {
         cell: target
       })
     } else {
-      console.log('ERROR: trying to play a creature on an occupied cell'); return false;
+      return false;
     }
   }
 

@@ -8,7 +8,7 @@ export const attackCreature = function (state, { attackerCreatureId, targetCreat
   if (!creatureCanAttack) { return false; }
   
   const invalidTarget = !isValidAttackTarget(state, { attackerCreatureId, targetCreatureId })
-  if (invalidTarget) { console.log('ERROR: invalid attack target'); return false; }
+  if (invalidTarget) { return false; }
 
   // triggers
   listener(state, { trigger: 'creatureAttacked', args: { attackerCreatureId, defenderCreatureId: targetCreatureId } })
@@ -72,10 +72,10 @@ export const canAttack = function (state, { attackerCreatureId }) {
 
   const supportColumn = attacker.pos.column === 1 || attacker.pos.column === state.columnCount
 
-  if (exhausted) { console.log('ERROR: trying to attack with an exhausted creature'); return false; }
-  if (summoningSickness) { console.log('ERROR: trying to attack with a summon sick creature'); return false; }
-  if (isPacific) { console.log('ERROR: trying to attack with a pacific creature'); return false; }
-  if (supportColumn) { console.log('ERROR: trying to attack from a support column'); return false; }
+  if (exhausted) { return false; }
+  if (summoningSickness) { return false; }
+  if (isPacific) { return false; }
+  if (supportColumn) { return false; }
 
   return true
 
@@ -101,7 +101,6 @@ const isValidAttackTarget = function (state, { attackerCreatureId, targetCreatur
 
   // different rows
   if (attacker.pos.row !== target.pos.row) {
-    console.log('ERROR: trying to attack a creature on a different row');
     return false;
   }  
 
@@ -130,7 +129,6 @@ const noBlocker = function (state, { attackerCreatureId, targetColumn }) {
   for (let i = leftCreatureColumn + 1; i <= rightCreatureColumn - 1; i++) {
     const creatureHere = creatureAtCell(state, { row: attacker.pos.row, column: i })
     if (creatureHere && creatureHere.controller !== attacker.controller) {
-      console.log('ERROR: trying to attack across a blocker');
       return false;
     }
   }

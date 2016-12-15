@@ -3,7 +3,7 @@ export const targetCreature = function (state, { selectedCreatureId, selectedAbi
   const ability = creature.abilities[selectedAbilityId]
   const canUse = canUseAbility(state, { selectedCreatureId, selectedAbilityId })
 
-  if (!canUse) { console.log('ERROR: this ability cannot be played by an exhausted creature'); return false;}
+  if (!canUse) { return false;}
 
   if (payAbilityCost(state, { selectedCreatureId, selectedAbilityId })) {
     ability.effect(state, creature, { targetCreatureId })
@@ -30,7 +30,6 @@ export const payAbilityCost = function (state, { selectedCreatureId, selectedAbi
         creature.exhausted = true
       }
     } else {
-      console.log('ERROR: cannot pay for that ability'); 
       return false;
     }  
   } 
