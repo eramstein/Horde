@@ -13,7 +13,7 @@ onmessage = function(e) {
   if (lethalStateSequence) {
     bestNewState = lethalStateSequence
   } else {
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 1000; i++) {
       const stateToUse = _.cloneDeep(initialState)
       const stateSequence = executeRandomActions(stateToUse)
       const finalState = stateSequence[stateSequence.length - 1]

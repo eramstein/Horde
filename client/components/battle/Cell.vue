@@ -1,6 +1,11 @@
 <template>
   <div class="cell" 
-    v-bind:style="{ left: x + '%', top: y + '%', width: width + '%', height: height + '%' }"
+    v-bind:style="{ left: x + '%', 
+                    top: y + '%', 
+                    width: width + '%', 
+                    height: height + '%',
+                    'border-right-width': borderRight + 'px'
+                  }"
     v-on:click="click"
     v-on:mouseover="mouseover"
     v-on:mouseout="mouseout"
@@ -21,17 +26,20 @@ export default {
   },
   computed: {
     x() {
-        return Math.floor( ( (this.data.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
+      return Math.floor( ( (this.data.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
     },
     y() {
-        return Math.floor( (this.data.row - 1) / (this.$store.getters.rowCount) * 100)
+      return Math.floor( (this.data.row - 1) / (this.$store.getters.rowCount) * 100)
     },
     width() {
-        return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
+      return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
     },
     height() {
-        return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
+      return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
     },
+    borderRight() {
+      return this.data.column === 1 || this.data.column === this.$store.getters.columnCount - 1 ? 3 : 1
+    }
   },
   methods: {
     click: function (event) {

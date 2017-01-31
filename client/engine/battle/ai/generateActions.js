@@ -47,9 +47,20 @@ const playCardFromHand = function (state, card) {
 
 const useCreature = function (state, creatureId) {
 
-  const propensityToAttackHero = 3
-  const propensityToAttackCreature = 3
-  const propensityToMove = 1
+  const hints = state.creatures[creatureId].hints || []
+
+  let propensityToAttackHero = 3
+  let propensityToAttackCreature = 3
+  let propensityToMove = 1
+
+  _.forEach(hints, (h) => {
+    if (h.type === 'attack') {
+      propensityToAttackHero += h.propensity
+      propensityToAttackCreature += h.propensity
+    } else if (h.type === 'move') {
+      propensityToMove += h.propensity
+    }
+  })
 
   const creatureCanMove = canMove(state, { creatureId })
   const creatureCanAttack = canAttack(state, { attackerCreatureId: creatureId })
@@ -58,29 +69,29 @@ const useCreature = function (state, creatureId) {
     creatureAttackTargets = validAttackTargets(state, { attackerCreatureId: creatureId })
   }
 
-  let possibleActions = []
-
-  const addAction = (a) => () => { possibleActions.push(a) }
-
-  if (creatureCanAttack && creatureAttackTargets.hero) {
-    _.times(propensityToAttackHero, addAction('attackHero'))
+  if (!(creatureCanAttack && creatureAttackTargets.hero)) {
+    propensityToAttackHero = 0
   }
 
-  if (creatureCanAttack && creatureAttackTargets.creatures.length > 0) {
-    _.times(propensityToAttackCreature, addAction('attackCreature'))
+  if (!(creatureCanAttack && creatureAttackTargets.creatures.length > 0)) {
+    propensityToAttackCreature = 0
   }
 
-  if (creatureCanMove) {
-    _.times(propensityToMove, addAction('move'))
+  if (!creatureCanMove) {
+    propensityToMove = 0
   }
-  
-  const action = _.sample(possibleActions)
 
-  if (action === 'attackHero') {
+  const random = _.random(1, propensityToAttackHero + propensityToAttackCreature + propensityToMove)
+  let action
+
+  if (random <= propensityToAttackHero) {
+    action = 'attackOpponent'
     attackOpponent(state, { attackerCreatureId: creatureId })
-  } else if (action === 'attackCreature') {
+  } else if (random <= propensityToAttackHero + propensityToAttackCreature) {
+    action = 'attackCreature'
     attackCreature(state, { attackerCreatureId: creatureId, targetCreatureId: creatureAttackTargets.creatures[0].id })
-  } else if (action === 'move') {
+  } else if (propensityToMove > 0) {
+    action = 'move'
     moveCreature(state, creatureId)
   }
 

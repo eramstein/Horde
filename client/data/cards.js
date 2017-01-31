@@ -23,6 +23,7 @@ export default {
         text: 'After Move, +1 ATK to adj. allies until EOT'
     }],
     keywords: {},
+    hints: [{ type: 'move', propensity: 3 }]
   },
   'Knight of the Rose': {
     type: 'creature',
