@@ -8,13 +8,12 @@ export default {
     subtypes: ['human'],
     cost: 1,
     hpMax: 2,
-    spMax: 1,
-    attackType: 'hp',
-    attackValue: 1,
+    energy: 0,
+    attack: 1,
     abilities: [{
         trigger: 'moved',
         effect: (state, me, { creatureId }) => {
-            const modifier = { type: 'attackValue', value: 1, until: 'eot' }
+            const modifier = { type: 'attack', value: 1, until: 'eot' }
             const targets = adjacentAllies(state, { ...me.pos, hero: me.controller })
             _.forEach(targets, (c) => {
                 addModifier(state, { creatureId: c.id, modifier })
@@ -23,28 +22,58 @@ export default {
         text: 'After Move, +1 ATK to adj. allies until EOT'
     }],
     keywords: {},
-    hints: [{ type: 'move', propensity: 3 }]
+  },
+  'Goblin': {
+    type: 'creature',
+    subtypes: ['goblin'],
+    cost: 1,
+    hpMax: 3,
+    energy: 0,
+    attack: 1,
+    abilities: [],
+    keywords: {},
+    behaviours: { stupid: true }
+  },
+  'Wolf': {
+    type: 'creature',
+    subtypes: ['animal'],
+    cost: 3,
+    hpMax: 3,
+    energy: 0,
+    attack: 3,
+    abilities: [],
+    keywords: {},
+    behaviours: { stupid: true }
+  },
+  'The Black Knight': {
+    type: 'creature',
+    subtypes: ['human', 'knight'],
+    cost: 10,
+    hpMax: 30,
+    energy: 0,
+    attack: 2,
+    abilities: [],
+    keywords: {},
+    behaviours: { stupid: true }
   },
   'Knight of the Rose': {
     type: 'creature',
     subtypes: ['human', 'soldier'],
     cost: 2,
     hpMax: 3,
-    spMax: 1,
-    attackType: 'hp',
-    attackValue: 1,
+    attack: 1,
+    energy: 1,
     abilities: [],
-    keywords: { attackAndMove: true, haste: true },
+    keywords: { charge: true },
   },
   'Wall of Pikes': {
     type: 'creature',
     subtypes: ['structure'],
     cost: 1,
-    hpMax: 3,
-    spMax: 9,
-    attackType: 'sp',
-    attackValue: 0,
-    abilities: [ abilities.retaliation({ damageType: 'sp', damageValue: 5 }) ],
+    hpMax: 9,
+    attack: 0,
+    energy: 0,
+    abilities: [ abilities.retaliation({ damage: 5 }) ],
     keywords: { static: true, pacific: true },
   },
   'Timz Tower': {
@@ -52,17 +81,15 @@ export default {
     subtypes: ['structure'],
     cost: 2,
     hpMax: 3,
-    spMax: 3,
-    attackType: 'hp',
-    attackValue: 0,
+    attack: 0,
+    energy: 3,
     abilities: [{
         trigger: 'activated',
-        costType: 'sp',
-        costValue: 1,
+        cost: 1,
         targetType: 'creature',
         exhausts: true,
         effect: (state, me, { targetCreatureId }) => {
-            damageCreature(state, { creatureId: targetCreatureId, damageType: 'hp', damageValue: 1 })
+            damageCreature(state, { creatureId: targetCreatureId, damage: 1 })
         },
         text: 'Deal 1 HP damage to target creature'
     }],
@@ -73,7 +100,7 @@ export default {
     cost: 1,
     targetType: 'creature',
     effect: (state, { targetCreatureId }) => {
-        damageCreature(state, { creatureId: targetCreatureId, damageType: 'hp', damageValue: 4 })
+        damageCreature(state, { creatureId: targetCreatureId, damage: 3 })
     },
     text: 'Deal 3 HP damage to target creature'
   },

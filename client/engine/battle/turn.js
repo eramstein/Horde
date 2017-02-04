@@ -8,21 +8,21 @@ export const startTurn = function (state, { hero }) {
     selectedCreatureId: null,
     selectedAbilityId: null,
     attackAnimation: null,
-  }
-  incrementMana(state, { hero, count: 1 })
-  replenishMana(state, { hero })
+  }  
   refreshCreatures(state, { hero })
   if (hero === 'player') {
+    incrementMana(state, { hero, count: 1 })
+    replenishMana(state, { hero })
     state.turn++
   }
 }
 
-export const replenishMana = function (state, { hero }) {
-  state.heroes[hero].mana = state.heroes[hero].manaMax
+export const replenishMana = function (state) {
+  state.player.mana = state.player.manaMax
 }
 
-export const incrementMana = function (state, { hero, count }) {
-  state.heroes[hero].manaMax = state.heroes[hero].manaMax + count
+export const incrementMana = function (state, { count }) {
+  state.player.manaMax = state.player.manaMax + count
 }
 
 export const refreshCreatures = function (state, { hero }) {

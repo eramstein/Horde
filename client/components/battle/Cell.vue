@@ -1,10 +1,9 @@
 <template>
   <div class="cell" 
-    v-bind:style="{ left: x + '%', 
-                    top: y + '%', 
-                    width: width + '%', 
-                    height: height + '%',
-                    'border-right-width': borderRight + 'px'
+    v-bind:style="{ left: x + 'px', 
+                    top: y + 'px', 
+                    width: width + 'px', 
+                    height: height + 'px',
                   }"
     v-on:click="click"
     v-on:mouseover="mouseover"
@@ -15,10 +14,10 @@
 </template>
 
 <script>
-import { canMove } from '../../engine/battle/creature'
+import { canMove, canSummonHere } from '../../engine/battle/creature'
 
 export default {
-  props: ['data'],
+  props: ['data', 'boardLayout'],
   data: function () {
     return {
       text: null
@@ -26,19 +25,16 @@ export default {
   },
   computed: {
     x() {
-      return Math.floor( ( (this.data.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
+      return (this.data.column - 1) * this.boardLayout.cellSize + this.boardLayout.leftShift
     },
     y() {
-      return Math.floor( (this.data.row - 1) / (this.$store.getters.rowCount) * 100)
+      return (this.data.row - 1) * this.boardLayout.cellSize
     },
     width() {
-      return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
+      return this.boardLayout.cellSize - 1 // -1 to collapse borders
     },
     height() {
-      return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
-    },
-    borderRight() {
-      return this.data.column === 1 || this.data.column === this.$store.getters.columnCount - 1 ? 3 : 1
+      return this.boardLayout.cellSize - 1
     }
   },
   methods: {
@@ -57,11 +53,10 @@ export default {
 
       const canPlay = 
         cardId &&
-        (card.template.type === 'spell' && card.template.targetType === 'cell' || card.template.type === 'creature')
+        (card.template.type === 'spell' && card.template.targetType === 'cell' || card.template.type === 'creature' && canSummonHere(this.$store.state.game.battle, { cardId, target: this.data }))
           ||
         creatureId &&
-        (creature.controller === 'player' && this.data.column <= this.$store.getters.columnCount / 2) &&
-        canMove(this.$store.state.game.battle, { creatureId })
+        creature.controller === 'player' && canMove(this.$store.state.game.battle, { creatureId, cell: this.data })
 
       if (canPlay) {
         if (cardId) {
@@ -82,9 +77,9 @@ export default {
 <style>
   .cell {
     position: absolute;
-    border-right: 1px #ccc solid;
-    border-bottom: 1px #ccc solid;
+    border: 1px #ccc solid;
     .cell-tip {
+      pointer-events: none; /* this prevents Cell mouse over triggers on hover the tip */
       text-align: center;
       font-size: 20px;
       font-weight: bold;

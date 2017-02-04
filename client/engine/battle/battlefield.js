@@ -38,3 +38,14 @@ export const getFreeCells = function (state, { side } ) {
 
   return freeCells
 }
+
+export const isLegalCell = function (state, { row, column }) {
+  return row > 0
+    && column > 0
+    && row <= state.rowCount
+    && column <= state.columnCount
+}
+
+export const getDistance = function (cell1, cell2) {
+  return Math.abs(cell1.row - cell2.row) + Math.abs(cell1.column - cell2.column)
+}

@@ -2,7 +2,7 @@ import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
 
 import { playCard } from '../engine/battle/hand'
 import { move as moveCreature } from '../engine/battle/creature'
-import { attackCreature, attackOpponent } from '../engine/battle/combat'
+import { attackCreature } from '../engine/battle/combat'
 import { targetCreature as abilityTargetCreature } from '../engine/battle/abilities'
 import { startTurn } from '../engine/battle/turn'
 import { setBattleTemplates } from './templates'
@@ -16,7 +16,6 @@ const mutations = {
   PLAY_CARD: playCard,
   MOVE_CREATURE: moveCreature,
   ATTACK_CREATURE: attackCreature,
-  ATTACK_OPPONENT: attackOpponent,
   START_TURN: startTurn,
   AA_TARGET_CREATURE: abilityTargetCreature,
   SELECT_CARD(state, { cardId }) {
@@ -54,7 +53,7 @@ const actions = {
   clickCell({ commit, state }, { row, column }) {
     const selectedCardId = state.ui.selectedCardId
     const selectedCreatureId = state.ui.selectedCreatureId
-    const selectedCard = selectedCardId && state.heroes.player.cards[selectedCardId]
+    const selectedCard = selectedCardId && state.player.cards[selectedCardId]
     // if a player's card was selected, play it on the target cell
     if (selectedCard &&
         (selectedCard.template.type === 'creature' || selectedCard.template.targetType === 'cell')
@@ -89,7 +88,7 @@ const actions = {
       : null;
     const selectedCardId = state.ui.selectedCardId
     const selectedCard = selectedCardId && selectedCardId !== null ? 
-      state.heroes[state.currentPlayer].cards[selectedCardId]
+      state.player.cards[selectedCardId]
       : null;
 
     // if an activated activity was selected and it targets creatures
@@ -130,40 +129,34 @@ const actions = {
     }
   },
 
-  clickOpponent({ commit, state }) {
-    const selectedCreatureId = state.ui.selectedCreatureId
-    if (state.creatures[selectedCreatureId] && 
-        state.creatures[selectedCreatureId].controller === 'player') {
-      commit('ATTACK_OPPONENT', { attackerCreatureId: selectedCreatureId })
-      commit('UNSELECT')
-    }
-  },
-
-  clickActivatedAbility({ commit, state }, { creatureId, key }) {
+  clickAbility({ commit, state }, { creatureId, key }) {
     commit('SELECT_CREATURE', { creatureId })
     commit('SELECT_ABILITY', { key })
   },
 
   clickTurnButton({ commit, state }) {
-    // pass turn to AI
-    commit('START_TURN', { hero: 'opponent' })
-    AI.postMessage(JSON.parse(JSON.stringify(state)))
-    // when AI is done
-    AI.onmessage = function(e) {
-      const aiStateSequence = e.data
-      // update state action by action
-      _.forEach(aiStateSequence, (newState, i) => {
-        newState = setBattleTemplates(newState, true)
+    if (state.currentPlayer === 'player') {
+      // pass turn to AI
+      commit('START_TURN', { hero: 'opponent' })
+      AI.postMessage(JSON.parse(JSON.stringify(state)))
+      // when AI is done
+      AI.onmessage = function(e) {
+        const aiStateSequence = e.data
+        // update state action by action
+        _.forEach(aiStateSequence, (newState, i) => {
+          newState = setBattleTemplates(newState, true)
+          setTimeout(() => {
+            commit('APPLY_AI_ACTIONS', newState)
+          }, i * 1000)        
+        })      
+        // back to player
         setTimeout(() => {
-          commit('APPLY_AI_ACTIONS', newState)
-        }, i * 1000)        
-      })      
-      // back to player
-      setTimeout(() => {
-          commit('START_TURN', { hero: 'player' })
-      }, (aiStateSequence.length) * 1000)
-      
-    }    
+            commit('START_TURN', { hero: 'player' })
+        }, (aiStateSequence.length) * 1000)     
+      }
+    } else {
+      commit('START_TURN', { hero: 'player' })
+    }        
   },
 }
 
@@ -180,12 +173,6 @@ const getters = {
     }
     return cells
   },
-  playerCells: (state, getters) => {
-    return getters.cells.filter(c => c.column <= state.columnCount / 2)
-  },
-  opponentCells: (state, getters) => {
-    return getters.cells.filter(c => c.column > state.columnCount / 2)
-  },
   playerCreatures: (state) => {
     return _.filter(state.creatures, c => c.controller === 'player')
   },
@@ -193,10 +180,11 @@ const getters = {
     return _.filter(state.creatures, c => c.controller === 'opponent')
   },
   creatures: state => state.creatures,
+  waves: state => state.opponent.waves,
   columnCount: state => state.columnCount,
   rowCount: state => state.rowCount,
-  player: state => state.heroes.player,
-  opponent: state => state.heroes.opponent,
+  player: state => state.player,
+  opponent: state => state.opponent,
   currentPlayer: state => state.currentPlayer,
   selectedCardId: state => state.ui.selectedCardId,
   selectedCreatureId: state => state.ui.selectedCreatureId,
@@ -217,21 +205,16 @@ export default {
     columnCount: 0,
     rowCount: 0,
     creatures: {},
-    heroes: {
-      player: {
-        name: '',
-        hp: 0,
-        mana: 0,
-        manaMax: 0,
-        cards: {}
-      },
-      opponent: {
-        name: '',
-        hp: 0,
-        mana: 0,
-        manaMax: 0,
-        cards: {}
-      },
+    player: {
+      name: '',
+      mana: 0,
+      manaMax: 0,
+      hp: 20,
+      cards: {}
+    },
+    opponent: {
+      name: '',
+      waves: {}
     },
   },
   mutations,

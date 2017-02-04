@@ -1,18 +1,14 @@
-export const addMana = function (state, {hero, count}) {
-  state.heroes[hero].mana = Math.max(state.heroes[hero].mana + count, 0)
+export const addMana = function (state, { count }) {
+  state.player.mana = Math.max(state.player.mana + count, 0)
 }
 
-export const damageHero = function (state, { hero, damage, sourceType, source }) {
-  state.heroes[hero].hp -= damage
-  if(state.heroes[hero].hp <= 0) {
-    killHero(state, { hero })
+export const damageHero = function (state, { damage, sourceType, source }) {
+  state.player.hp -= damage
+  if (state.player.hp <= 0) {
+    killHero(state)
   }
 }
 
-export const killHero = function (state, { hero }) {
-  if (hero === 'player') {
-    //console.log('you lose, booooo')
-  } else {
-    //console.log('you win, yaaayyy')
-  }  
+export const killHero = function (state) {
+  //console.log('you lose, booooo')
 }

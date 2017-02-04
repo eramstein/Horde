@@ -1,9 +1,12 @@
 import { listener } from './listener'
 import cards from '../../data/cards'
 import { idPrefix } from '../config'
-import { isCellOccupied } from './battlefield'
+import { isCellOccupied, isLegalCell } from './battlefield'
 
 export const summon = function (state, { creatureName, hero , cell }) {
+
+  if (isCellOccupied(state, cell) || !isLegalCell(state, cell)) { return }
+
   const id = idPrefix.CREATURES + (_.keys(state.creatures).length + _.keys(state.graveyard).length)
   const template = _.cloneDeep(cards[creatureName])
   const creatures = _.cloneDeep(state.creatures)
@@ -12,7 +15,7 @@ export const summon = function (state, { creatureName, hero , cell }) {
     name: creatureName,    
     ...template,
     hp: template.hpMax,
-    sp: template.spMax,
+    energy: template.energy,
     modifiers: [],
     owner: hero,
     controller: hero,
@@ -25,10 +28,10 @@ export const summon = function (state, { creatureName, hero , cell }) {
   state.creatures = creatures
 }
 
-export const damage = function (state, { creatureId, damageValue, damageType }) {
+export const damage = function (state, { creatureId, damage }) {
   const creature = state.creatures[creatureId]
-  creature[damageType] -= damageValue
-  if (creature.hp <= 0 || creature.sp <= 0) {
+  creature.hp -= damage
+  if (creature.hp <= 0) {
     destroy(state, { creatureId })
   }
 }
@@ -44,20 +47,11 @@ export const destroy = function (state, { creatureId }) {
   state.graveyard = graveyard
 }
 
-export const move = function (state, { creatureId, cell, skipChecks }) {
+export const move = function (state, { creatureId, cell }) {
   const thisCreature = state.creatures[creatureId]
 
-  if (!skipChecks === true) {
-    // can the creature move ?
-    if (canMove(state, { creatureId }) === false) {
-      return false
-    }
-    // is the move invalid ?
-    const cellOccupied = isCellOccupied(state, cell)
-    const wrongColumn = thisCreature.controller === 'player' && cell.column > state.columnCount / 2
-      || thisCreature.controller === 'opponent' && cell.column <= state.columnCount / 2
-    if (cellOccupied) { return false; }
-    if (wrongColumn) { return false; }
+  if (canMove(state, { creatureId, cell }) === false) {
+    return false
   }  
   
   // if move valid, do it
@@ -69,9 +63,10 @@ export const move = function (state, { creatureId, cell, skipChecks }) {
 }
 
 
-export const canMove = function (state, { creatureId }) {
+export const canMove = function (state, { creatureId, cell }) {
   const thisCreature = state.creatures[creatureId]
 
+  // can the creature move at all
   const staticCreature = thisCreature.keywords.static
 
   const exhausted = thisCreature.hasMoved && !thisCreature.keywords.extraMoves
@@ -82,16 +77,69 @@ export const canMove = function (state, { creatureId }) {
   const summoningSickness = 
     thisCreature.summonedOnTurn === state.turn && !thisCreature.keywords.haste
 
-  const myCreaturesCount = _.filter(state.creatures, c => c.controller === state.currentPlayer).length
-  const cellCount = state.rowCount * state.columnCount
-  const nowhereToMove = myCreaturesCount >= cellCount
-
   if (staticCreature) { return false; }
   if (exhausted) { return false; }
   if (summoningSickness) { return false; }
-  if (nowhereToMove) { return false; }
+
+  // is the target cell valid
+  let invalidCell = false 
+
+  if (cell && cell.row && cell.column) {
+    let validCells = reachableCells(state, { creatureId })
+    invalidCell = !validCells[cell.column + '-' + cell.row]
+  }
+
+  if (invalidCell) { return false; }
   
   return true
+}
+
+// returns an object like { "3-2": true } with 3 as the column and 2 the row
+export const reachableCells = function (state, { creatureId }) {
+  let creatureMoves = state.creatures[creatureId].moves || 2
+  let pos = state.creatures[creatureId].pos
+  let reachableCells = {}
+
+  checkAdjacent(pos, creatureMoves)
+
+  function checkAdjacent(cell, moves) {
+    moves--
+    if (moves < 0) { return }
+    // top 
+    exploreCell({ row: (cell.row - 1), column: cell.column }, moves)
+    // bottom 
+    exploreCell({ row: (cell.row + 1), column: cell.column }, moves)
+    // left 
+    exploreCell({ row: cell.row, column: (cell.column - 1) }, moves)
+    // right 
+    exploreCell({ row: cell.row, column: (cell.column + 1) }, moves)
+    
+  }
+
+  function exploreCell(cellToExplore, movesLeft) {
+    if (cellToExplore.row > 0 && 
+      cellToExplore.row <= state.rowCount && 
+      cellToExplore.column > 0 && 
+      cellToExplore.column <= state.columnCount && 
+      !isCellOccupied(state, cellToExplore) && 
+      !reachableCells[cellToExplore.column + '-' + cellToExplore.row]) {
+      
+      reachableCells[cellToExplore.column + '-' + cellToExplore.row] = true      
+      checkAdjacent(cellToExplore, movesLeft)
+
+    }   
+  }
+
+  return reachableCells
+}
+
+export const reachableCellsAsArray = function (state, { creatureId }) {
+  const reachableCellsAsObject = reachableCells(state, { creatureId })
+  let array = [] 
+  _.forEach(reachableCellsAsObject, (val, key) => {
+    array.push({ row: key.split('-')[1]*1, column: key.split('-')[0]*1})
+  })
+  return array
 }
 
 
@@ -148,4 +196,12 @@ export const cancelModifier = function (state, { creatureId, modifier }) {
       creature.keywords[modifier.value.keyword] = false
     }
   }  
+}
+
+export const canSummonHere = function (state, { cardId, target }) {
+  const creature = state.player.cards[cardId]
+
+  const correctColumn = target.column === 1 || creature.template.keywords.airdrop
+
+  return correctColumn && !isCellOccupied(state, target)
 }

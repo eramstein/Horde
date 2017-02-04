@@ -1,0 +1,753 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"padd",
+				"padding"
+			],
+			[
+				"marg",
+				"margin"
+			],
+			[
+				"border-right",
+				"border-right-width"
+			],
+			[
+				"star",
+				"startAngle"
+			],
+			[
+				"z",
+				"z-index"
+			],
+			[
+				"marin",
+				"margin-right"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"anima",
+				"animatedX"
+			],
+			[
+				"col",
+				"columnCount"
+			],
+			[
+				"for",
+				"for	for (…) {…} (Improved Native For-Loop)"
+			],
+			[
+				"padding",
+				"padding-top"
+			],
+			[
+				"no",
+				"nowrap"
+			],
+			[
+				"bor",
+				"border-right"
+			],
+			[
+				"mar",
+				"margin-right"
+			],
+			[
+				"margi",
+				"margin-top"
+			],
+			[
+				"save",
+				"savedData"
+			],
+			[
+				"set",
+				"setTime"
+			],
+			[
+				"per",
+				"permanents"
+			],
+			[
+				"_c",
+				"_gCurrentPlayer"
+			],
+			[
+				"_ce",
+				"_cellWidth"
+			],
+			[
+				"cell",
+				"_cellHeight"
+			],
+			[
+				"cur",
+				"cursor"
+			],
+			[
+				"pa",
+				"padding-top"
+			],
+			[
+				"padding-",
+				"padding-right"
+			],
+			[
+				"bacg",
+				"background-color"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"update",
+				"updateChart"
+			],
+			[
+				"tran",
+				"transitionTime"
+			],
+			[
+				"lo",
+				"localDataPath"
+			],
+			[
+				"in",
+				"input	Tag"
+			],
+			[
+				"di",
+				"dimensions"
+			],
+			[
+				"brav",
+				"braves"
+			],
+			[
+				"ne",
+				"newPlayer"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"s",
+				"script	Tag"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "client/engine/battle/ai/worker.js",
+			"settings":
+			{
+				"buffer_size": 1545,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "client/engine/battle/ai/useCreature.js",
+			"settings":
+			{
+				"buffer_size": 884,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "client/engine/battle/creature.js",
+			"settings":
+			{
+				"buffer_size": 6148,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: Function"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			],
+			[
+				"linter",
+				"Preferences: SublimeLinter Settings – Default"
+			],
+			[
+				"uni",
+				"Preferences: SublimeLinter Settings – User"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"user",
+				"Preferences: Settings - User"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Hero.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Battle.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Card.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/worker.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Wave.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Creature.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/combat.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/battlefield.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/creature.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/getInitialState.js",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Creature.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Cell.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/data/cards.js",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/ai/generateActions.js",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/ai/worker.js",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/getInitialState.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Keyword.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/AbilityTooltip.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/store/battle.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/CreatureTooltip.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/hand.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/turn.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/spell.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/hero.js",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Battle.vue",
+		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Cell.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/store/templates.js",
+		"/C/Users/Etienne/Desktop/Horde/client/data/abilities.js",
+		"/C/Users/Etienne/Desktop/Horde/client/data/mobs.js",
+		"/C/Users/Etienne/Desktop/probe/index.html",
+		"/C/Users/Etienne/Desktop/probe/lodash.js",
+		"/C/Users/Etienne/Desktop/probe/public/index.html",
+		"/C/Users/Etienne/Desktop/probe/public/api.js",
+		"/C/Users/Etienne/Desktop/probe/public/table.js",
+		"/C/Users/Etienne/Desktop/probe/barchart.js",
+		"/C/Users/Etienne/Desktop/probe/public/filter.js",
+		"/C/Users/Etienne/Desktop/probe/public/patients.tsv",
+		"/C/Users/Etienne/Desktop/probe/table.js",
+		"/C/Users/Etienne/Desktop/probe/patients.tsv",
+		"/C/Users/Etienne/Desktop/probe/public/barchart.js",
+		"/C/Users/Etienne/Desktop/probe/public/areachart.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/main.css",
+		"/C/Users/Etienne/Desktop/probe/firebase.json",
+		"/C/Users/Etienne/Desktop/probe/areachart.js",
+		"/C/Users/Etienne/Desktop/probe/api.js",
+		"/C/Users/Etienne/Desktop/probe/filter.js",
+		"/C/Users/Etienne/Desktop/probe/.firebaserc",
+		"/C/Users/Etienne/Desktop/probe/data.tsv",
+		"/C/Users/Etienne/Desktop/probe/barchart1.js",
+		"/C/Users/Etienne/Desktop/probe/patients.csv",
+		"/C/Users/Etienne/Desktop/probe/data.csv",
+		"/C/Users/Etienne/Desktop/data needs.txt",
+		"/C/Users/Etienne/Desktop/pixi.html",
+		"/C/Users/Etienne/Downloads/graphics.js",
+		"/C/Users/Etienne/Desktop/data needs",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/generateActions.js",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/public/views/main.html",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/public/styles/main.css",
+		"/C/Users/Etienne/Desktop/CV/cv.html",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/public/scripts/directives/chartBarpie.js",
+		"/C/Users/Etienne/Desktop/GOC/GOC/app/views/startup.html",
+		"/C/Users/Etienne/Desktop/GOC/GOC/app/scripts/services/dataload.js",
+		"/C/Users/Etienne/Desktop/GOC/GOC/app/scripts/controllers/startup.js",
+		"/C/Users/Etienne/Desktop/GOC/GOC/app/views/main.html",
+		"/C/Users/Etienne/Desktop/GOC/GOC/app/scripts/charts/barchart.js",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/scripts/directives/chartBarpie.js",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/scripts/services/data.js",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/scripts/app.js",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/public/index.html",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/firebase.json",
+		"/C/Users/Etienne/Desktop/OpenFDA/app/index.html",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/computeStateValue.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/abilities.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/Gamemenu.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/App.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Overlay.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/listener.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/animations.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/findLethal.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/strategy.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/config.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/system.js",
+		"/C/Users/Etienne/Desktop/Horde/client/store/game.js",
+		"/C/Users/Etienne/Desktop/Horde/build/webpack.base.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/board.css",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/picks.css",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/cards.css",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/activatedAbilities.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/cards/cards.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/cards/effects.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/cards/abilities.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/permanent.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/cards/conditions.js",
+		"/C/Users/Etienne/Desktop/Horde/client/store/index.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/worker.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/state/listeners.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/creature.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/game.js",
+		"/C/Users/Etienne/Desktop/Horde/build/config.js",
+		"/C/Users/Etienne/Desktop/Horde/.gitignore",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/getters.js",
+		"/C/Users/Etienne/Desktop/Horde/client/data/creatures.js",
+		"/C/Users/Etienne/Desktop/Horde/package.json",
+		"/C/Users/Etienne/Desktop/Horde/build/utils.js",
+		"/C/Users/Etienne/Desktop/Horde/node_modules/lodash/lodash.js",
+		"/C/Users/Etienne/Desktop/Horde/build/webpack.dev.js",
+		"/C/Users/Etienne/Desktop/Horde/build/index.html",
+		"/C/Users/Etienne/Desktop/Horde/build/server.js",
+		"/C/Users/Etienne/Desktop/Horde/client/index.js",
+		"/C/Users/Etienne/Desktop/Horde/client/app.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/state/mutators.js",
+		"/C/Users/Etienne/Desktop/Horde/client/views/gameConfig.js",
+		"/C/Users/Etienne/Desktop/Horde/client/views/Home.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/views/Game.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/notes.txt",
+		"/C/Users/Etienne/Desktop/Horde/client/store/setDefaultState.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/campaign/Campaign.vue",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/player.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/firebase.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/main.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/config.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/lobby/games.js",
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/state/state.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/Game.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/router/index.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/Counter.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/Battle.vue",
+		"/C/Users/Etienne/Desktop/ALGO/median/median.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 96.0,
+		"where_history":
+		[
+			"C:\\Users\\Etienne\\Desktop\\Horde\\client",
+			"C:\\Users\\Etienne\\Desktop\\SetteQuaci\\scripts",
+			"C:\\Users\\Etienne\\Desktop\\DOC2\\scripts",
+			"C:\\Users\\Etienne\\Desktop\\TheGame\\app",
+			"C:\\Users\\Etienne\\Desktop\\Goc\\app",
+			"C:\\Users\\Etienne\\Desktop\\TheGame\\app",
+			"C:\\Users\\Etienne\\Desktop\\Wiki",
+			"C:\\Users\\Etienne\\Desktop\\SQ Firebase\\app",
+			"C:\\Users\\Etienne\\Desktop\\SQ Firebase\\app\\js",
+			"C:\\Users\\Etienne\\Desktop\\SQ Firebase"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"o",
+			"reachableCells",
+			"'-'",
+			"%",
+			"canAttackPlayer",
+			"canAttackHero",
+			"attackOpponent",
+			"dealCombatDamage",
+			"isValidAttackTarget",
+			"row",
+			"validAttackTargets",
+			"isValidAttackTarget",
+			"isCellOccupied",
+			"creatures",
+			"stateSequence.push",
+			"initialState",
+			"hoverEventDone",
+			"mouseover",
+			"row",
+			"cellToExplore",
+			"isCellOccupied",
+			"canMove",
+			"myCreaturesCount",
+			"canMove",
+			"clickActivatedAbility",
+			"clickAbility",
+			"clickActivatedAbility",
+			"clickAbility",
+			"Wave",
+			"keywords",
+			"white",
+			"background",
+			"12px",
+			"stats",
+			"energy",
+			"2",
+			"%",
+			"isCellOccupied",
+			";",
+			"hero",
+			"startTurn",
+			"heroes[hero]",
+			"heroes",
+			"ATTACK_OPPONENT",
+			"isOpponent*",
+			"opponent",
+			"isOpponent",
+			"Card",
+			"Hero",
+			"heroes",
+			"+",
+			"cellSize",
+			"board",
+			"cellSize",
+			"Size",
+			"%",
+			"this.data.cellSize",
+			"cellSize",
+			"Width",
+			"cells-container",
+			"heroes.",
+			"midSpaceSize",
+			"sp",
+			"[a.costType]",
+			"costValue",
+			"cells-hero",
+			"cells-container",
+			"cells-center",
+			"damageValue",
+			"4",
+			"bar",
+			"min",
+			"max",
+			"med",
+			"Bar",
+			"WeightLoss",
+			"0",
+			"margin.left + ",
+			"id",
+			"400",
+			"title",
+			"\"",
+			"g.selectAll('.bar')\n        .data(values, d => d.key)",
+			"outcome",
+			"variable",
+			"buildBarchart",
+			"weightLoss",
+			"dataFullRange",
+			"outcome",
+			"svgAreaChart",
+			"svg",
+			"valueline",
+			"\"",
+			"[variable]",
+			"date",
+			"\"",
+			"data",
+			"\"",
+			"data",
+			"weightLoss",
+			"letter",
+			"frequency",
+			"\"",
+			",",
+			";",
+			"1",
+			"Child",
+			"deciles",
+			"last",
+			"10",
+			"period",
+			"power",
+			"const",
+			"10000",
+			"transform",
+			"users",
+			"end user",
+			"Javascript",
+			"JS / ES6",
+			"JS / ES6 ",
+			"object",
+			"javascript / jQuery",
+			"transform",
+			"transfoTween",
+			"console.log",
+			"canMove",
+			"APPLY_AI_ACTIONS",
+			"Cell"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": true,
+		"regex": true,
+		"replace_history":
+		[
+			"\\t",
+			",",
+			"bilityId",
+			"isCellOccupied",
+			"selectedCreatureId",
+			"selectedCardId",
+			"]",
+			"\\]",
+			"]",
+			"",
+			"],",
+			"]",
+			"",
+			"onDealCombatDamage",
+			"getTemplate",
+			"setCurrentPicks",
+			"init",
+			"buildPicks",
+			"joinLobby",
+			"displayLobby",
+			"tankCapacity",
+			"turnDuration",
+			"board",
+			"game",
+			"update",
+			"mob",
+			"getMobCountAtPos",
+			"getUnitCountAtPos",
+			"getUnitsAtPos",
+			"Mob",
+			"unit",
+			"'",
+			"template",
+			"triplet",
+			"Article",
+			"",
+			" ",
+			"",
+			" ,",
+			" ",
+			".",
+			",",
+			"site",
+			"sites",
+			"game",
+			"brave",
+			"game",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "client/engine/battle/ai/worker.js",
+					"settings":
+					{
+						"buffer_size": 1545,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1404,
+								1404
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "client/engine/battle/ai/useCreature.js",
+					"settings":
+					{
+						"buffer_size": 884,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								878,
+								878
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "client/engine/battle/creature.js",
+					"settings":
+					{
+						"buffer_size": 6148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1788,
+								1817
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1080.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 144.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 205.0,
+	"status_bar_visible": false
+}

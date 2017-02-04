@@ -1,10 +1,7 @@
 <template>
-  <div class="hero" v-on:click="click">
-    <div class="name">    
-      {{ data.name }}
-    </div>
+  <div class="hero">
     <div class="wrapper">
-      <div class="hp"> {{ data.hp }} </div>
+      <div class="hp"> <div>{{ data.hp }}</div> </div>
       <div class="mana"> 
         <div class="mana-active">{{ data.mana }}</div>
         <div class="mana-inactive"> / {{ data.manaMax }}</div> 
@@ -20,37 +17,35 @@ export default {
   props: ['data'],
   computed: {
   },
-  methods: {
-    click: function (event) {
-      if (this.data.isOpponent) {
-        this.$store.dispatch('clickOpponent')
-      }      
-    }
-  },
 }
 </script>
 
 <style>
 .hero {
-  min-height: 105px;
-  padding-bottom: 20px;
-  border-bottom: 1px #ccc solid;
+  position: absolute;
+  top: 10px;
+  left: 110px;
   .hp {
     color: white;
     float: left;
-    margin-left: 20px;
     font-weight: bold;
     background-color: #ec4411;
     border-radius: 50%;
-    width: 25px;
-    height: 17px;
+    width: 35px;
+    height: 27px;
     padding: 5px 0px;
     text-align: center;
+
+    div {
+      margin-top: 4px;
+      font-size: 16px;
+    }
   }
   .mana {
     float: right;
-    padding-right: 20px;
+    margin-left: 20px;
     font-size: 20px;
+    margin-top: 4px;
     div {
       float: left;
     }
@@ -70,12 +65,6 @@ export default {
     font-weight: bold;
     height: 24px; 
     padding-top: 2px;
-  }
-  .name {
-    text-align: center;
-    font-weight: lighter;
-    font-size: 25px;
-    padding: 10px 0px;
   }
 }
 </style>

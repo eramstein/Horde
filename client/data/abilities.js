@@ -2,13 +2,13 @@ import { adjacentCreatures, adjacentAllies } from '../engine/battle/battlefield'
 import { addModifier, damage as damageCreature } from '../engine/battle/creature'
 
 export default {
-  retaliation: ({ damageType, damageValue }) => {
+  retaliation: ({ damage }) => {
     return {
         trigger: 'isAttacked',
         effect: (state, me, { attackerCreatureId }) => {
-            damageCreature(state, { creatureId: attackerCreatureId, damageType, damageValue })
+            damageCreature(state, { creatureId: attackerCreatureId, damage })
         },
-        text: () => 'Retaliation: ' + damageType + ' ' + damageValue
+        text: () => 'Retaliation: ' + damage
     }
   }
 }

@@ -3,12 +3,20 @@
     v-bind:id="data.id"
     v-on:click="click"
     v-bind:class="{ creature: true, selected: isSelected }"
-    v-bind:style="{ left: x + '%', top: y + '%', width: width + '%', height: height + '%' }"
+    v-bind:style="{ left: x + 'px', 
+                    top: y + 'px', 
+                    width: width + 'px', 
+                    height: height + 'px',
+                    borderColor: data.controller === 'opponent' ? '#d20505' : '#333',
+                  }"
   >
     <div v-bind:class="{ cont: true, exhausted: cannotDoAnything }">
       <div v-if="isSummoningSick" class="sleeping">
         zzz
       </div>
+      <div class="energy round-box"
+        v-bind:style="{ left: (width/2 - 10) + 'px' }"
+      >{{ data.energy }}</div>      
       <div class="name">
         {{ data.name }} 
       </div>
@@ -21,26 +29,20 @@
                         'active': (key === selectedAbilityId) && isSelected }" 
         v-for="(ability, key) in data.abilities"
         v-on:click="clickAbility({ability, key})"
-        :data="ability">
-        <div v-bind:class="{ 'round-box': true, 
-                             'sp': ability.costType === 'sp', 
-                             'hp': ability.costType === 'hp', 
+        :data="ability">        
+        <div v-bind:class="{ 'ability-button': true,
+                             'energy': true, 
                              'tap': ability.exhausts === true }" 
-             v-if="ability.costValue">
-          {{ ability.costValue }}
+             v-if="ability.cost">
+          {{ ability.cost }}
         </div>
-        {{ _.isFunction(ability.text) ? ability.text() : ability.text }}
+        <div v-else class="ability-button">
+          P
+        </div>
       </div>
-      <div class="wrapper">
-        <div class="stats">
-          <div class="pull-left">
-            <div class="hp round-box">{{ data.hp }}</div>
-            <div class="sp round-box">{{ data.sp }}</div>
-          </div>
-          <div v-bind:class="{ 'pull-right': true, atk: true, hp: data.attackType === 'hp', sp: data.attackType === 'sp' }">
-            {{ data.attackValue }}
-          </div>
-        </div>
+      <div class="hp round-box">{{ data.hp }}</div>
+      <div class="atk round-box">
+        {{ data.attack }}
       </div>
     </div>    
   </div>
@@ -55,22 +57,22 @@ export default {
   components: {
     Keyword,
   },
-  props: ['data'],
+  props: ['data', 'boardLayout'],
   computed: {
     isSelected: function () {
       return this.$store.getters.selectedCreatureId === this.data.id
     },
     x() {
-      return Math.floor( ( (this.data.pos.column - 1) % 3) / (this.$store.getters.columnCount / 2) * 100)
+      return (this.data.pos.column - 1) * this.boardLayout.cellSize + this.boardLayout.leftShift
     },
     y() {
-      return Math.floor( (this.data.pos.row - 1) / (this.$store.getters.rowCount) * 100)
+      return (this.data.pos.row - 1) * this.boardLayout.cellSize
     },
     width() {
-      return Math.floor( 1 / (this.$store.getters.columnCount / 2) * 100)
+      return this.boardLayout.cellSize - 1
     },
     height() {
-      return Math.floor( 1 / (this.$store.getters.rowCount) * 100)
+      return this.boardLayout.cellSize - 1
     },
     selectedAbilityId() {
       return this.$store.getters.selectedAbilityId
@@ -93,7 +95,7 @@ export default {
           || canMove(state, {creatureId: this.data.id }) === false
             && canAttack(state, {attackerCreatureId: this.data.id }) === false
             && _.filter(this.data.abilities, a => 
-                a.trigger === 'activated' && this.data[a.costType] > a.costValue
+                a.trigger === 'activated' && this.data.energy > a.cost
               ).length === 0
         )
       ) {
@@ -105,13 +107,11 @@ export default {
   },
   methods: {
     click: function (event) {
-      if(event.target.className.indexOf('activated') >= 0) { return false; }
+      if(event.target.className.indexOf('ability-button') >= 0) { return false; }
       this.$store.dispatch('clickCreature', { creatureId: this.data.id })
     },
     clickAbility: function ({ability, key}) {
-      if (ability.trigger === 'activated') {
-        this.$store.dispatch('clickActivatedAbility', { creatureId: this.data.id, key })
-      }      
+      this.$store.dispatch('clickAbility', { creatureId: this.data.id, key })
     }
   },
   watch: {
@@ -124,7 +124,7 @@ export default {
       }, 450)
 
     },
-    'data.sp': function(newValue, oldValue) {
+    'data.energy': function(newValue, oldValue) {
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#8DBDFF'
       el.style.backgroundColor = color
@@ -143,19 +143,14 @@ export default {
         const attackerCreature = this.$store.getters.creatures[newValue.attackerCreatureId]
         const attackerCreaturePos = attackerCreature.pos
         const attackerCreatureController = attackerCreature.controller
-        let midSpaceSize = 9 // warn: magic number! should fit with battle.vue css
-
-        if (attackerCreatureController === 'opponent') {
-          midSpaceSize = -midSpaceSize
-        }
-        
+                
         if (newValue.targetCreaturePos) {
           diffPos = { 
             x: newValue.targetCreaturePos.column - attackerCreaturePos.column,
             y: newValue.targetCreaturePos.row - attackerCreaturePos.row,
           }
         } else {
-          if (newValue.defenderHero === 'player') {
+          if (newValue.defender === 'player') {
             diffPos = { 
               x: 0 - attackerCreaturePos.column,
               y: 0,
@@ -168,13 +163,13 @@ export default {
           }
         }
 
-        const colSize = 100 / (this.$store.getters.columnCount / 2)
-        el.style.left = (oldPos.x + (diffPos.x * colSize) + midSpaceSize) + '%'
-        el.style.top = (oldPos.y + (diffPos.y * colSize)) + '%'
+        const colSize = 100 / this.$store.getters.columnCount
+        el.style.left = (oldPos.x + (diffPos.x * colSize)) + 'px'
+        el.style.top = (oldPos.y + (diffPos.y * colSize)) + 'px'
 
         setTimeout( () => {
-          el.style.left = oldPos.x + '%'
-          el.style.top = oldPos.y + '%'
+          el.style.left = oldPos.x + 'px'
+          el.style.top = oldPos.y + 'px'
         }, 450)
 
       }
@@ -218,16 +213,13 @@ export default {
       padding-bottom: 10px;
       text-align: center;
       font-weight: lighter;
-      font-size: 25px;
+      font-size: 16px;
     }
     .sleeping {
       position: absolute;
-      top: 2px;
+      top: 0px;
       right: 5px;
       color: #4D96FB;
-    }
-    .keywords {
-      padding: 0px 0px 10px 10px;
     }
     .ability {
       padding: 2px 6px;
@@ -243,44 +235,40 @@ export default {
       background-color: #ddd;
     }
     .active {
-      background-color: #FED087 !important;
+      background-color: antiquewhite !important;
     }
     .round-box {
-      float: left;
       text-align: center;
-      width: 22px;
-      height: 20px;
+      width: 19px;
+      height: 16px;
       border-radius: 50%;      
-      padding-top: 2px;            
+      padding-top: 2px;
+      border-width: 1px;
+      border-style: solid;           
     }
-    .sp {
-      background-color: #4D96FB;
-      color: white;
+    .energy {
+      border-color: #4D96FB;
+      color: #333;
+      position: absolute;
+      bottom: 2px;
+      font-size: 13px;
     }
     .hp {
-      background-color: #ec4411;
-      color: white;
-    }
-    .stats {
-      width: 100%;
+      border-color: #ec4411;
+      color: #333;
       position: absolute;
-      bottom: 0;
-      right: 0;
-      padding-bottom: 5px;
-      div {    
-        font-weight: bold;
-        margin-left: 3px;
-      }      
-      .atk {
-        margin-left: 6px;
-        margin-right: 5px;
-        color: white;
-        width: 22px;
-        height: 20px; 
-        text-align: center;
-        padding-top: 2px;     
-      }
-    } 
+      bottom: 2px;
+      left: 2px;
+      font-size: 13px;
+    }
+    .atk {
+      border-color: #ec4411;
+      color: #333;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      font-size: 13px;
+    }
   }  
 }
 

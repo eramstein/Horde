@@ -1,35 +1,33 @@
 '<template>
-  <div class="game-container">
-    <div class="column player">      
-      <Hero :data="player"></Hero>
-      <Card v-for="card in player.cards" :data="card"></Card>
+  <div class="game-container">    
+    <div id="top">
+      <AbilityTooltip></AbilityTooltip>
     </div>
-    <div class="column battlefield">
-      <div class="column cells-container cells-hero">
-        <Cell v-for="cell in playerCells" :data="cell"></Cell>
+    <div id="middle">
+      <div class="column player-column">
+        <Hero :data="player"></Hero>
+        <Card v-for="card in player.cards" :data="card"></Card>
+      </div>
+      <div class="column" id="battlefield">
+        <Cell v-for="cell in cells" :data="cell" :boardLayout="boardLayout"></Cell>
         <transition-group name="player-creatures" tag="div">
-          <Creature v-for="creature in playerCreatures" :data="creature" :key="creature.id"></Creature>
+          <Creature v-for="creature in playerCreatures" :data="creature" :key="creature.id" :boardLayout="boardLayout"></Creature>
         </transition-group>
-      </div>
-      <div class="column cells-container cells-center">     
-        
-      </div>
-      <div class="column cells-container cells-hero">     
-        <Cell v-for="cell in opponentCells" :data="cell"></Cell>
         <transition-group name="opponent-creatures" tag="div">
-          <Creature v-for="creature in opponentCreatures" :data="creature" :key="creature.id"></Creature>
+          <Creature v-for="creature in opponentCreatures" :data="creature" :key="creature.id" :boardLayout="boardLayout"></Creature>
         </transition-group>
-      </div>      
+      </div>
+      <div class="column opponent-column">
+        <Wave v-for="wave in waves" :data="wave"></Wave>
+      </div>
     </div>
-    <div class="column opponent" v-bind:class="{ 'active-player': currentPlayer === 'opponent' }">
-      <Hero :data="opponent"></Hero>
-      <Card v-for="card in opponent.cards" :data="card"></Card>      
-      <button class="pass-turn"
-        v-bind:disabled="currentPlayer === 'opponent'"
-        v-on:click="clickTurnButton">
+    <div id="bottom"></div>
+    <button class="pass-turn"
+        v-bind:disabled="currentPlayer === 'opponent' && 1==0"
+        v-on:click="clickTurnButton"
+        v-bind:class="{ disabled: currentPlayer === 'opponent' }">
         Pass Turn
-      </button>       
-    </div>    
+    </button>     
   </div>
 </template>
 
@@ -38,6 +36,8 @@ import Cell from './Cell'
 import Card from './Card'
 import Creature from './Creature'
 import Hero from './Hero'
+import Wave from './Wave'
+import AbilityTooltip from './AbilityTooltip'
 
 export default {
   components: {
@@ -45,13 +45,27 @@ export default {
     Card,
     Creature,
     Hero,
+    Wave,
+    AbilityTooltip,
   },
   computed: {
-    playerCells() {
-        return this.$store.getters.playerCells
+    cells() {
+        return this.$store.getters.cells
     },
-    opponentCells() {
-        return this.$store.getters.opponentCells
+    boardLayout() {
+      //cells are square. size depends on the battlefield w/h ratio vs column/rows ratio
+      const btWidth = document.getElementById('battlefield').offsetWidth
+      const btHeight = document.getElementById('battlefield').offsetHeight
+      const pixelPerColumn = btWidth / this.$store.getters.columnCount
+      const pixelPerRow = btHeight / this.$store.getters.rowCount
+      const cellSize = Math.round(Math.min(pixelPerColumn, pixelPerRow))
+      return {
+        cellSize,
+        leftShift: Math.max(0, (btWidth - this.$store.getters.columnCount * cellSize) / 2)
+      }
+    },
+    creatures() {
+        return this.$store.getters.creatures
     },
     playerCreatures() {
         return this.$store.getters.playerCreatures
@@ -62,10 +76,8 @@ export default {
     player() {
         return this.$store.getters.player
     },
-    opponent() {
-        let opponent = this.$store.getters.opponent
-        opponent.isOpponent = true
-        return opponent
+    waves() {
+        return this.$store.getters.waves
     },
     currentPlayer() {
         return this.$store.getters.currentPlayer
@@ -82,16 +94,36 @@ export default {
 <style>
 
 .selected {
-  background-color: #ddd !important;
+  box-shadow: 3px 3px 2px rgba(136, 136, 136, 0.57);
 }
 
 .game-container {
   width: 100vw;
+  height: 100vh;
+
+  #top, #bottom {
+    height: 10%;
+  }
+
+  #middle {
+    height: 80%;
+  }
 
   .column {
     float: left;
-    height: 100vh;    
+    height: 100%;    
   }
+
+  .player-column {
+    width: 18%;
+    padding-right: 2%;
+  }
+
+  .opponent-column {
+    width: 18%;
+    padding-left: 2%;
+  }
+
   .active-player {
     background-color: #DEDEDE !important;
   }
@@ -101,27 +133,11 @@ export default {
     z-index: 100;
     position: relative;
   }
-  .player {
-    margin-right: 1%;
-    border-right: 1px solid #ccc;
-  }
-  .opponent {
-    float: right;
-    border-left: 1px solid #ccc;
-  }
-  .battlefield {
-    width: 78%;    
-    border-left: 1px solid #ccc;
-  }
-  .cells-container {
+  #battlefield {
+    width: 60%;
+    height: 100%;
+    text-align: center;
     position: relative;
-  }
-  .cells-hero {
-    width: 45%;
-  }
-  .cells-center {
-    width: 9%;
-    border-right: 1px solid #ccc;
   }
   .pass-turn {
     position: absolute;
@@ -130,6 +146,9 @@ export default {
     right: 10px;
     font-size: 20px;
     font-weight: bold;
+  }
+  .disabled {
+    color: #666;
   }
 }    
 </style>
