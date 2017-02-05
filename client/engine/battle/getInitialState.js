@@ -28,7 +28,17 @@ export default function (options) {
         [idPrefix.PLAYER_CARDS + '2']: {
           id: idPrefix.PLAYER_CARDS + '2',
           name: 'Lightining Bolt',
-          count: 1,
+          count: 3,
+        },
+        [idPrefix.PLAYER_CARDS + '3']: {
+          id: idPrefix.PLAYER_CARDS + '3',
+          name: 'Knight of the Rose',
+          count: 3,
+        },
+        [idPrefix.PLAYER_CARDS + '4']: {
+          id: idPrefix.PLAYER_CARDS + '4',
+          name: 'Timz Tower',
+          count: 3,
         }
       }
     },

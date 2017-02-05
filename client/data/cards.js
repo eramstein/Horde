@@ -79,8 +79,8 @@ export default {
   'Timz Tower': {
     type: 'creature',
     subtypes: ['structure'],
-    cost: 2,
-    hpMax: 3,
+    cost: 1,
+    hpMax: 99,
     attack: 0,
     energy: 3,
     abilities: [{
@@ -93,7 +93,7 @@ export default {
         },
         text: 'Deal 1 HP damage to target creature'
     }],
-    keywords: { static: true, pacific: true },
+    keywords: { static: true, pacific: true, airdrop: true },
   },
   'Lightining Bolt': {
     type: 'spell',

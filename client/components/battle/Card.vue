@@ -31,6 +31,7 @@ export default {
 <style>
 
 .card {
+  background-color: white;
   border: 1px #ccc solid;
   padding: 10px 20px;
   margin: 0px 0px 10px 20px;
@@ -49,7 +50,7 @@ export default {
     height: 20px; 
     text-align: center;
     padding-top: 2px;
-    background-color: #00026F;
+    background-color: #6e7de6;
   }
 }
 

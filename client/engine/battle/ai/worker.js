@@ -17,14 +17,14 @@ onmessage = function(e) {
     let rootRow = Math.round(state.rowCount / 2)
     let layer = 0
     let direction = 1
-    _.forEach(wave, creatures => {      
-      for (let i = 1; i <= creatures.count ; i++) {
+    _.forEach(wave, creature => {      
+      for (let i = 1; i <= creature.count ; i++) {
         row = rootRow + layer * direction
         direction = -direction
         if (direction === -1) { layer++ }
         cell = { row, column: state.columnCount }
         if (row > 0 && row <= state.rowCount) {
-          summon(state, { creatureName: creatures.creature, hero: 'opponent' , cell })       
+          summon(state, { creatureName: creature.creature, hero: 'opponent' , cell, isGeneral: creature.general })       
         }         
       }
       stateSequence.push(_.cloneDeep(state))

@@ -7,42 +7,50 @@
                     top: y + 'px', 
                     width: width + 'px', 
                     height: height + 'px',
-                    borderColor: data.controller === 'opponent' ? '#d20505' : '#333',
+                    backgroundColor: data.controller === 'opponent' ? 'rgba(251, 229, 197, 0.31)' : 'rgba(217, 227, 249, 0.31)',
                   }"
   >
     <div v-bind:class="{ cont: true, exhausted: cannotDoAnything }">
       <div v-if="isSummoningSick" class="sleeping">
         zzz
       </div>
-      <div class="energy round-box"
-        v-bind:style="{ left: (width/2 - 10) + 'px' }"
-      >{{ data.energy }}</div>      
+      <div v-if="data.isGeneral" class="general">
+      </div>    
       <div class="name">
         {{ data.name }} 
       </div>
-      <div class="wrapper keywords">
-        <Keyword v-for="(keyword, key) in data.keywords" :data="{ key, keyword }"></Keyword>
+      <div class="keywords">
+        <Keyword v-for="(keyword, key) in data.keywords" :data="{ key, keyword }"></Keyword>           
       </div>
-      <div 
-        v-bind:class="{ 'ability': true, 
-                        'activated': ability.trigger === 'activated', 
-                        'active': (key === selectedAbilityId) && isSelected }" 
-        v-for="(ability, key) in data.abilities"
-        v-on:click="clickAbility({ability, key})"
-        :data="ability">        
-        <div v-bind:class="{ 'ability-button': true,
-                             'energy': true, 
-                             'tap': ability.exhausts === true }" 
-             v-if="ability.cost">
-          {{ ability.cost }}
-        </div>
-        <div v-else class="ability-button">
-          P
+      <div class="abilities">
+        <div 
+          v-bind:class="{ 'ability': true, 
+                          'activated': ability.trigger === 'activated', 
+                          'active': (key === selectedAbilityId) && isSelected }" 
+          v-for="(ability, key) in data.abilities"
+          v-on:click="clickAbility({ability, key})"
+          :data="ability">        
+          <div v-bind:class="{ 'ability-button': true,
+                               'energy': true, 
+                               'tap': ability.exhausts === true }" 
+               v-if="ability.cost">
+            {{ ability.cost }}
+          </div>
+          <div v-else class="ability-button">
+            !
+          </div>
         </div>
       </div>
-      <div class="hp round-box">{{ data.hp }}</div>
-      <div class="atk round-box">
-        {{ data.attack }}
+      <div class="stat-bar">
+        <div class="stat-val hp">
+          {{ data.hp }}
+        </div>
+        <div class="stat-val energy">
+          {{ data.energy }}
+        </div>
+        <div class="stat-val attack">
+          {{ data.attack }}
+        </div>
       </div>
     </div>    
   </div>
@@ -50,7 +58,7 @@
 
 <script>
 import { canMove } from '../../engine/battle/creature'
-import { canAttack } from '../../engine/battle/combat'
+import { canAttack, attackableCreatures } from '../../engine/battle/combat'
 import Keyword from './Keyword'
 
 export default {
@@ -88,16 +96,15 @@ export default {
     },
     cannotDoAnything() {
       const state = this.$store.state.game.battle
+      if(this.data.controller === 'opponent') { return false }      
       if (
-        this.data.controller === this.$store.getters.currentPlayer &&
-        (this.data.exhausted
+        this.data.exhausted
           || this.isSummoningSick
           || canMove(state, {creatureId: this.data.id }) === false
-            && canAttack(state, {attackerCreatureId: this.data.id }) === false
+            && (canAttack(state, {attackerCreatureId: this.data.id }) === false || attackableCreatures(state, { attackerCreatureId: this.data.id }).length === 0)
             && _.filter(this.data.abilities, a => 
-                a.trigger === 'activated' && this.data.energy > a.cost
-              ).length === 0
-        )
+                a.trigger === 'activated' && this.data.energy >= a.cost
+              ).length === 0        
       ) {
         return true
       } else {
@@ -118,18 +125,20 @@ export default {
     'data.hp': function(newValue, oldValue) {
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#ED7855'
+      const oldBg = el.style.backgroundColor
       el.style.backgroundColor = color
       setTimeout( () => {
-        el.style.backgroundColor = null
+        el.style.backgroundColor = oldBg
       }, 450)
 
     },
     'data.energy': function(newValue, oldValue) {
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#8DBDFF'
+      const oldBg = el.style.backgroundColor
       el.style.backgroundColor = color
       setTimeout( () => {
-        el.style.backgroundColor = null
+        el.style.backgroundColor = oldBg
       }, 450)
 
     },
@@ -204,7 +213,7 @@ export default {
   z-index: 50;
   .exhausted {
     color: #ddd;
-  }
+  }  
   .cont {
     position: relative;
     height: 100%;
@@ -221,54 +230,67 @@ export default {
       right: 5px;
       color: #4D96FB;
     }
-    .ability {
-      padding: 2px 6px;
-      .round-box {
-        margin-right: 5px;
+    .general {
+      height: 5px;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      background-color: #e02626;
+    }
+    .abilities {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      .ability {
+        float: right;
+        width: 30px;
+        height: 18px;
+        border: 1px #222 solid;
+        margin-right: 5px;        
+        .ability-button {
+          height: 100%;
+        }
       }
-      .tap {
-        border: 2px #222 solid;
+      .active {
+        .ability-button {
+          background-color: antiquewhite !important;
+        }
       }
-    }
-    .activated:hover {
-      cursor: pointer;
-      background-color: #ddd;
-    }
-    .active {
-      background-color: antiquewhite !important;
-    }
-    .round-box {
-      text-align: center;
-      width: 19px;
-      height: 16px;
-      border-radius: 50%;      
-      padding-top: 2px;
-      border-width: 1px;
-      border-style: solid;           
-    }
-    .energy {
-      border-color: #4D96FB;
-      color: #333;
+      .tap:before {
+        content: "›";
+      }
+      .energy {
+        background-color: #b0b6e0;
+      }
+      .activated:hover {
+        cursor: pointer;
+        background-color: #ddd !important;
+      }      
+    } 
+    .keywords {
       position: absolute;
-      bottom: 2px;
-      font-size: 13px;
+      bottom: 20px;
     }
-    .hp {
-      border-color: #ec4411;
-      color: #333;
+    .stat-bar {
       position: absolute;
-      bottom: 2px;
-      left: 2px;
-      font-size: 13px;
-    }
-    .atk {
-      border-color: #ec4411;
-      color: #333;
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      font-size: 13px;
-    }
+      bottom: 0;
+      width: 100%;
+      .stat-val {
+        float: left;
+        width: 33.33%;
+        color: white;
+      }
+      .hp {
+        background-color: #bf1a1a;
+      }
+      .attack {
+        background-color: #de760b;
+      }
+      .energy {
+        background-color: #6e7de6;
+      }
+    }    
   }  
 }
 

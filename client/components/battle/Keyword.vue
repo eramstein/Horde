@@ -1,11 +1,6 @@
 <template>
   <div class="keyword">
-    <div class="key">    
-      {{ keyLabel }}
-    </div>
-    <div class="value">    
-      {{ valueLabel }}
-    </div>
+   {{ shortLabel + valueLabel}}
   </div>  
 </template>
 
@@ -28,6 +23,9 @@ export default {
     keyLabel: function () {
       return labels[this.data.key] || _.capitalize(this.data.key)
     },
+    shortLabel: function () {
+      return this.data.key.charAt(0).toUpperCase()
+    },
   }
 }
 </script>
@@ -35,9 +33,7 @@ export default {
 <style>
 .keyword {
   float: left;
-  padding: 10px 20px 10px 10px;
-  div {
-    float: left;
-  }
+  padding: 1px 2px;
+  font-size: 12px;
 }
 </style>

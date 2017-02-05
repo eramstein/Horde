@@ -100,6 +100,7 @@ export default {
 .game-container {
   width: 100vw;
   height: 100vh;
+  background-color: rgb(35, 2, 2);
 
   #top, #bottom {
     height: 10%;
@@ -133,7 +134,7 @@ export default {
     z-index: 100;
     position: relative;
   }
-  #battlefield {
+  #battlefield {    
     width: 60%;
     height: 100%;
     text-align: center;

@@ -3,7 +3,7 @@ import cards from '../../data/cards'
 import { idPrefix } from '../config'
 import { isCellOccupied, isLegalCell } from './battlefield'
 
-export const summon = function (state, { creatureName, hero , cell }) {
+export const summon = function (state, { creatureName, hero , cell, isGeneral }) {
 
   if (isCellOccupied(state, cell) || !isLegalCell(state, cell)) { return }
 
@@ -24,6 +24,7 @@ export const summon = function (state, { creatureName, hero , cell }) {
     hasAttacked: 0,
     summonedOnTurn: state.turn,
     exhausted: false,
+    isGeneral,
   }
   state.creatures = creatures
 }
@@ -153,11 +154,8 @@ export const addModifier = function (state, { creatureId, modifier }) {
   if(modifier.type === 'hpMax') {
     creature.hpMax += modifier.value
   }
-  if(modifier.type === 'spMax') {
-    creature.spMax += modifier.value
-  }
-  if(modifier.type === 'attackValue') {
-    creature.attackValue += modifier.value
+  if(modifier.type === 'attack') {
+    creature.attack += modifier.value
   }
   if(modifier.type === 'keyword') {
     let currentVal = creature.keywords[modifier.value.keyword]
@@ -181,11 +179,8 @@ export const cancelModifier = function (state, { creatureId, modifier }) {
   if(modifier.type === 'hpMax') {
     creature.hpMax -= modifier.value    
   }
-  if(modifier.type === 'spMax') {
-    creature.spMax -= modifier.value
-  }
-  if(modifier.type === 'attackValue') {
-    creature.attackValue -= modifier.value
+  if(modifier.type === 'attack') {
+    creature.attack -= modifier.value
   }
 
   if(modifier.type === 'keyword') {

@@ -76,6 +76,7 @@ export default {
 
 <style>
   .cell {
+    background-color: white;
     position: absolute;
     border: 1px #ccc solid;
     .cell-tip {

@@ -72,7 +72,6 @@ const actions = {
         creatureId: selectedCreatureId,
         cell: { row, column },
       })
-      commit('UNSELECT')
     }
   },
 

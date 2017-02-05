@@ -29,7 +29,7 @@ export default {
     color: white;
     float: left;
     font-weight: bold;
-    background-color: #ec4411;
+    background-color: #bf1a1a;
     border-radius: 50%;
     width: 35px;
     height: 27px;
@@ -57,7 +57,7 @@ export default {
     height: 24px; 
     text-align: center;
     padding: 2px 3px 0px 3px;
-    background-color: #00026F;
+    background-color: #6e7de6;
     margin-right: 6px;
   }
   .mana-inactive {

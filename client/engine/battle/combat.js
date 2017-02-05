@@ -4,6 +4,8 @@ import { destroy as destroyCreature } from './creature'
 import { damageHero } from './hero'
 
 export const attackCreature = function (state, { attackerCreatureId, targetCreatureId }) {
+  const attacker = state.creatures[attackerCreatureId]
+
   const creatureCanAttack = canAttack(state, { attackerCreatureId })
   if (!creatureCanAttack) { return false; }
   
@@ -14,8 +16,8 @@ export const attackCreature = function (state, { attackerCreatureId, targetCreat
   listener(state, { trigger: 'creatureAttacked', args: { attackerCreatureId, defenderCreatureId: targetCreatureId } })
 
   // state change
-  state.creatures[attackerCreatureId].hasAttacked++
-  dealCombatDamage(state, { attackerCreatureId, targetCreatureId })  
+  attacker.hasAttacked++
+  dealCombatDamage(state, { attackerCreatureId, targetCreatureId })
 
 }
 
@@ -43,8 +45,16 @@ export const dealCombatDamage = function (state, { attackerCreatureId, targetCre
 
   defender.hp = defender.hp - attacker.attack
 
+  if (!attacker.keywords.firstStrike || defender.hp > 0) {
+    attacker.hp = attacker.hp - defender.attack
+  }
+
   if (defender.hp <= 0) {
     destroyCreature(state, { creatureId: targetCreatureId })
+  }
+
+  if (attacker.hp <= 0) {
+    destroyCreature(state, { creatureId: attackerCreatureId })
   }
 
 }
@@ -55,7 +65,6 @@ export const canAttack = function (state, { attackerCreatureId }) {
   
   const exhausted = attacker.hasAttacked && !attacker.keywords.extraAttacks
     || attacker.keywords.extraAttacks && attacker.hasAttacked > attacker.keywords.extraAttacks
-    || attacker.hasMoved && !attacker.keywords.attackAndMove
     || attacker.exhausted
 
   const summoningSickness = 

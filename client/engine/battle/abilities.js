@@ -23,9 +23,9 @@ export const payAbilityCost = function (state, { selectedCreatureId, selectedAbi
   const creature = state.creatures[selectedCreatureId]
   const ability = creature.abilities[selectedAbilityId]
 
-  if (ability.costValue) {
-    if (creature[ability.costType] > ability.costValue) {
-      creature[ability.costType] -= ability.costValue
+  if (ability.cost) {
+    if (creature.energy >= ability.cost) {
+      creature.energy -= ability.cost
       if (ability.exhausts) {
         creature.exhausted = true
       }
