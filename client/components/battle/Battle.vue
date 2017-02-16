@@ -1,5 +1,5 @@
 '<template>
-  <div class="game-container">    
+  <div class="game-container">
     <div id="top">
       <AbilityTooltip></AbilityTooltip>
     </div>
@@ -95,12 +95,13 @@ export default {
 
 .selected {
   box-shadow: 3px 3px 2px rgba(136, 136, 136, 0.57);
+  font-weight: bold;
 }
 
 .game-container {
   width: 100vw;
   height: 100vh;
-  background-color: rgb(35, 2, 2);
+  background-color: #222;
 
   #top, #bottom {
     height: 10%;

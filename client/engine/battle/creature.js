@@ -29,6 +29,11 @@ export const summon = function (state, { creatureName, hero , cell, isGeneral })
   state.creatures = creatures
 }
 
+export const heal = function (state, { creatureId, value }) {
+  const creature = state.creatures[creatureId]
+  creature.hp = Math.min(creature.hpMax, creature.hp + value)
+}
+
 export const damage = function (state, { creatureId, damage }) {
   const creature = state.creatures[creatureId]
   creature.hp -= damage
@@ -48,19 +53,29 @@ export const destroy = function (state, { creatureId }) {
   state.graveyard = graveyard
 }
 
+export const addEnergy = function (state, { creatureId, value }) {
+  const creature = state.creatures[creatureId]
+  creature.energy += value
+  if (creature.energy < 0) {
+    creature.energy = 0
+  }
+}
+
 export const move = function (state, { creatureId, cell }) {
-  const thisCreature = state.creatures[creatureId]
+  const creature = state.creatures[creatureId]
 
   if (canMove(state, { creatureId, cell }) === false) {
     return false
-  }  
+  }
+
+  const oldPos = state.creatures[creatureId].pos
   
   // if move valid, do it
   state.creatures[creatureId].hasMoved++
   state.creatures[creatureId].pos = cell
 
-  // triggers
-  listener(state, { trigger: 'creatureMoved', args: { creatureId, to: cell } })
+  // triggers  
+  listener(state, { trigger: 'creatureMoved', args: { creatureId, to: cell, from: oldPos } })
 }
 
 
@@ -97,6 +112,7 @@ export const canMove = function (state, { creatureId, cell }) {
 
 // returns an object like { "3-2": true } with 3 as the column and 2 the row
 export const reachableCells = function (state, { creatureId }) {
+
   let creatureMoves = state.creatures[creatureId].moves || 2
   let pos = state.creatures[creatureId].pos
   let reachableCells = {}
@@ -118,19 +134,19 @@ export const reachableCells = function (state, { creatureId }) {
   }
 
   function exploreCell(cellToExplore, movesLeft) {
+    // we store how many moves left when we tag a cell, to have it block future paths only if they have fewer moves left
+    const movesLeftWhenLastExplored = reachableCells[cellToExplore.column + '-' + cellToExplore.row] || 0  
     if (cellToExplore.row > 0 && 
       cellToExplore.row <= state.rowCount && 
       cellToExplore.column > 0 && 
       cellToExplore.column <= state.columnCount && 
       !isCellOccupied(state, cellToExplore) && 
-      !reachableCells[cellToExplore.column + '-' + cellToExplore.row]) {
-      
-      reachableCells[cellToExplore.column + '-' + cellToExplore.row] = true      
+      movesLeftWhenLastExplored <= movesLeft) {
+      reachableCells[cellToExplore.column + '-' + cellToExplore.row] = movesLeft      
       checkAdjacent(cellToExplore, movesLeft)
-
     }   
   }
-
+  _.forEach(reachableCells, (val, key) => { reachableCells[key] = true } )
   return reachableCells
 }
 

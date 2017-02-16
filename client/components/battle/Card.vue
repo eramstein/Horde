@@ -3,7 +3,7 @@
     v-on:click="click"
     v-bind:class="{ card: true, selected: isSelected }"
   >    
-    <div class="name">
+    <div v-bind:class="{ name: true, disabled: !isPlayable }">
       {{ data.name }} ({{ data.count }})
     </div>
     <div class="mana-cost">{{ data.template.cost }}</div>
@@ -18,6 +18,9 @@ export default {
   computed: {
     isSelected: function () {
       return this.$store.getters.selectedCardId === this.data.id
+    },
+    isPlayable: function () {
+      return this.$store.getters.player.mana >= this.data.template.cost
     }
   },
   methods: {
@@ -40,6 +43,9 @@ export default {
 
   .name {
     padding-bottom: 5px;
+  } 
+  .disabled {
+    color: #aaa;
   }  
   .mana-cost {
     position: absolute;

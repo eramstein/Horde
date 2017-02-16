@@ -1,9 +1,14 @@
-export const targetCreature = function (state, { selectedCreatureId, selectedAbilityId, targetCreatureId }) {
+export const activateAbility = function (state, { selectedCreatureId, selectedAbilityId, targetCreatureId }) {
   const creature = state.creatures[selectedCreatureId]
   const ability = creature.abilities[selectedAbilityId]
   const canUse = canUseAbility(state, { selectedCreatureId, selectedAbilityId })
 
-  if (!canUse) { return false;}
+  if (!canUse) { return false }
+
+  if (ability.targetType === 'creature' && ability.targetFilter) {
+    const target = state.creatures[targetCreatureId]
+    if (!ability.targetFilter(target)) { return false }    
+  }
 
   if (payAbilityCost(state, { selectedCreatureId, selectedAbilityId })) {
     ability.effect(state, creature, { targetCreatureId })

@@ -1,5 +1,5 @@
 <template>
-  <div class="cell" 
+  <div v-bind:class="{ cell: true, highlighted: highlighted }" 
     v-bind:style="{ left: x + 'px', 
                     top: y + 'px', 
                     width: width + 'px', 
@@ -35,6 +35,10 @@ export default {
     },
     height() {
       return this.boardLayout.cellSize - 1
+    },
+    highlighted() {
+      return this.$store.getters.reachableCells 
+        && this.$store.getters.reachableCells[this.data.column + '-' + this.data.row]
     }
   },
   methods: {
@@ -47,24 +51,19 @@ export default {
       const cards = this.$store.getters.player.cards
       const cardId = this.$store.getters.selectedCardId
       const card = cards[cardId]
-      const creatures = this.$store.getters.creatures
-      const creatureId = this.$store.getters.selectedCreatureId
-      const creature = creatures[creatureId]
 
       const canPlay = 
-        cardId &&
-        (card.template.type === 'spell' && card.template.targetType === 'cell' || card.template.type === 'creature' && canSummonHere(this.$store.state.game.battle, { cardId, target: this.data }))
-          ||
-        creatureId &&
-        creature.controller === 'player' && canMove(this.$store.state.game.battle, { creatureId, cell: this.data })
+        card &&
+        (
+        card.template.type === 'spell' && 
+        card.template.targetType === 'cell' 
+          || 
+        card.template.type === 'creature' && 
+        canSummonHere(this.$store.state.game.battle, { cardId, target: this.data })
+        )
 
       if (canPlay) {
-        if (cardId) {
-          this.text = card.name
-        }
-        if (creatureId) {
-          this.text = 'move'
-        }
+        this.text = card.name
       }      
     },
     mouseout: function (event) {
@@ -89,5 +88,8 @@ export default {
       top: 50%;
       transform: translateY(-50%);   
     }
+  }
+  .cell.highlighted {
+    background-color: #fbead2;
   }
 </style>

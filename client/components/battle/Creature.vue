@@ -7,7 +7,7 @@
                     top: y + 'px', 
                     width: width + 'px', 
                     height: height + 'px',
-                    backgroundColor: data.controller === 'opponent' ? 'rgba(251, 229, 197, 0.31)' : 'rgba(217, 227, 249, 0.31)',
+                    backgroundColor: data.controller === 'opponent' ? opponentCreatureColor : playerCreatureColor,
                   }"
   >
     <div v-bind:class="{ cont: true, exhausted: cannotDoAnything }">
@@ -67,6 +67,8 @@ export default {
   },
   props: ['data', 'boardLayout'],
   computed: {
+    playerCreatureColor() { return 'rgba(217, 227, 249, 0.31)' },
+    opponentCreatureColor() { return 'rgba(217, 227, 249, 0.31)' },
     isSelected: function () {
       return this.$store.getters.selectedCreatureId === this.data.id
     },
@@ -125,21 +127,19 @@ export default {
     'data.hp': function(newValue, oldValue) {
       const el = document.getElementById(this.data.id)
       const color = newValue > oldValue ? '#8AE08A' : '#ED7855'
-      const oldBg = el.style.backgroundColor
       el.style.backgroundColor = color
-      setTimeout( () => {
-        el.style.backgroundColor = oldBg
+      setTimeout( () => {        
+        el.style.backgroundColor = this.playerCreatureColor
       }, 450)
 
     },
     'data.energy': function(newValue, oldValue) {
       const el = document.getElementById(this.data.id)
-      const color = newValue > oldValue ? '#8AE08A' : '#8DBDFF'
-      const oldBg = el.style.backgroundColor
+      const color = newValue > oldValue ? '#9DABFF' : '#D4B1FF'
       el.style.backgroundColor = color
       setTimeout( () => {
-        el.style.backgroundColor = oldBg
-      }, 450)
+        el.style.backgroundColor = this.playerCreatureColor
+      }, 500)
 
     },
     attackAnimation: function(newValue, oldValue) {
@@ -221,7 +221,6 @@ export default {
       padding-top: 10px;
       padding-bottom: 10px;
       text-align: center;
-      font-weight: lighter;
       font-size: 16px;
     }
     .sleeping {
@@ -242,6 +241,7 @@ export default {
       position: absolute;
       bottom: 20px;
       width: 100%;
+      font-weight: lighter !important;
       .ability {
         float: right;
         width: 30px;
@@ -271,11 +271,13 @@ export default {
     .keywords {
       position: absolute;
       bottom: 20px;
+      font-weight: lighter !important;
     }
     .stat-bar {
       position: absolute;
       bottom: 0;
       width: 100%;
+      font-weight: lighter !important;
       .stat-val {
         float: left;
         width: 33.33%;

@@ -1,8 +1,13 @@
 <template>
-  <div class="ability-tooltip" v-if="ability.text">
+  <div class="ability-tooltip" 
+    v-if="ability.text"
+    v-on:click="click">
     <div class="ability-text">    
       {{ ability.text }}
-    </div>
+      <span class="ability-activate" v-if="!ability.targetType && ability.trigger==='activated'">    
+        Click to activate
+      </span>
+    </div>    
   </div>  
 </template>
 
@@ -17,6 +22,11 @@ export default {
 
       return this.$store.getters.creatures[creature].abilities[id]
     },
+  },
+  methods: {
+    click: function (event) {
+      this.$store.dispatch('clickAbilityTooltip')
+    }
   }
 }
 </script>
@@ -27,5 +37,9 @@ export default {
   text-align: center;
   font-size: 16px;
   background-color: antiquewhite;
+}
+.ability-activate {
+  font-weight: bold;
+  color: darkred;
 }
 </style>

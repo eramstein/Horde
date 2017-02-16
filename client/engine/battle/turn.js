@@ -1,4 +1,5 @@
 import { cancelModifier } from './creature'
+import { listener } from './listener'
 
 export const startTurn = function (state, { hero }) {
   clearEndOfTurnModifiers(state)
@@ -7,10 +8,12 @@ export const startTurn = function (state, { hero }) {
     selectedCardId: null,
     selectedCreatureId: null,
     selectedAbilityId: null,
+    reachableCells: null,
     attackAnimation: null,
   }  
   refreshCreatures(state, { hero })
   if (hero === 'player') {
+    listener(state, { trigger: 'startPlayerTurn' })
     incrementMana(state, { hero, count: 1 })
     replenishMana(state, { hero })
     state.turn++

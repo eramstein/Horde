@@ -3,18 +3,23 @@ import { attackPlayer, attackCreature, attackableCreatures, canAttack, canAttack
 
 export const useCreature = function (state, creature) {
   let newState = _.cloneDeep(state)
-  let creatureAction
+  let creatureAction = null
+  let result
+  let newStates = []
   if (creature.behaviours.stupid) {
-    creatureAction = doStupid(newState, creature)
+    result = doStupid(newState, creature)
+    creatureAction = result.creatureAction
+    newStates = result.newStates
   }
 
-  return { newState, creatureAction }
+  return { newStates, creatureAction }
 }
 
 const doStupid = function (state, creature) {
 
   const creatureId = creature.id
   let creatureAction = null
+  let newStates = []
 
   // do in priority:
   // - attack hero
@@ -23,16 +28,22 @@ const doStupid = function (state, creature) {
   //    - order of choice: can kill, most hp, most expensive, right col, top row
   // - move forward. lower column amonst valid cells. tie -> top row
 
-  const attack = function () {
-    if (canAttack(state, { attackerCreatureId: creatureId })) {
+  const pushState = function (action, stateAfterAction) {
+    newStates.push(_.cloneDeep(stateAfterAction))
+    creatureAction = action
+  }
 
-      // attack hero
+  const attack = function () {
+    // attack hero
+    if (canAttack(state, { attackerCreatureId: creatureId }) && canAttackPlayer(state, { attackerCreatureId: creatureId })) {      
       if (canAttackPlayer(state, { attackerCreatureId: creatureId })) {
         attackPlayer(state, { attackerCreatureId: creatureId })
-        creatureAction = 'attackedPlayer'
-      }    
-
-      // attack creature
+        pushState('attackedPlayer', state)
+      }
+    }
+    // attack creature
+    if (canAttack(state, { attackerCreatureId: creatureId })) {
+      
       const targets = attackableCreatures(state, { attackerCreatureId: creatureId })
 
       if (targets.length > 0) { 
@@ -61,7 +72,7 @@ const doStupid = function (state, creature) {
         attackValues = _.sortBy(attackValues, ['attackValue'], ['desc'])
 
         attackCreature(state, { attackerCreatureId: creatureId, targetCreatureId: attackValues[0].target })
-        creatureAction = 'attackedCreature'
+        pushState('attackedCreature', state)
       }
     }
   }
@@ -75,13 +86,15 @@ const doStupid = function (state, creature) {
     possibleMoves = _.sortBy(possibleMoves, ['column', 'row'])
     if (possibleMoves.length > 0) {
       move(state, { creatureId, cell: possibleMoves[0] })
-      creatureAction = 'moved'
+      pushState('moved', state)
     }
   }
 
-  // attack after move
-  attack();
+  // attack after move (if still alive)
+  if (state.creatures[creatureId]) {
+    attack();
+  }  
 
-  return creatureAction  
+  return { newStates, creatureAction }
 
 }

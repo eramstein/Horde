@@ -5,7 +5,7 @@
 		[
 			[
 				"font",
-				"font-size"
+				"font-weight"
 			],
 			[
 				"margin",
@@ -159,86 +159,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "client/components/battle/Creature.vue",
-			"settings":
-			{
-				"buffer_size": 8001,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/components/battle/Keyword.vue",
-			"settings":
-			{
-				"buffer_size": 652,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/engine/battle/combat.js",
-			"settings":
-			{
-				"buffer_size": 3594,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/data/cards.js",
-			"settings":
-			{
-				"buffer_size": 2633,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/engine/battle/abilities.js",
-			"settings":
-			{
-				"buffer_size": 1289,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/engine/battle/creature.js",
-			"settings":
-			{
-				"buffer_size": 6004,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/engine/battle/ai/useCreature.js",
-			"settings":
-			{
-				"buffer_size": 3084,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/components/battle/Hero.vue",
-			"settings":
-			{
-				"buffer_size": 1173,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/components/battle/Card.vue",
-			"settings":
-			{
-				"buffer_size": 1003,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "client/engine/battle/getInitialState.js",
-			"settings":
-			{
-				"buffer_size": 1421,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -312,37 +232,46 @@
 	},
 	"file_history":
 	[
-		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Creature.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/worker.js",
-		"/C/Users/Etienne/Desktop/Horde/client/store/battle.js",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/creature.js",
-		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Card.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/getInitialState.js",
 		"/C/Users/Etienne/Desktop/Horde/client/data/cards.js",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/combat.js",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/useCreature.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/getInitialState.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/turn.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/creature.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/abilities.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Creature.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/store/battle.js",
+		"/C/Users/Etienne/Desktop/Horde/client/data/abilities.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/AbilityTooltip.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/battlefield.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Cell.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/listener.js",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Keyword.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/data/mobs.js",
+		"/C/Users/Etienne/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/worker.js",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/useCreature.js",
 		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Battle.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Card.vue",
+		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/combat.js",
+		"/C/Users/Etienne/Desktop/Horde/build/webpack.base.js",
+		"/C/Users/Etienne/Desktop/vue2/new-project/build/webpack.base.js",
+		"/C/Users/Etienne/Desktop/vue2/new-project/client/views/Home.vue",
+		"/C/Users/Etienne/Desktop/vue2/new-project/client/components/Counter.vue",
+		"/C/Users/Etienne/Desktop/vue2/new-project/client/components/App.vue",
+		"/C/Users/Etienne/Desktop/vue2/new-project/client/app.js",
+		"/C/Users/Etienne/Desktop/Horde/build/config.js",
 		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Hero.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Wave.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/battlefield.js",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Creature.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Cell.vue",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/ai/generateActions.js",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/ai/worker.js",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/engine/battle/getInitialState.js",
-		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Keyword.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/components/battle/AbilityTooltip.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/components/battle/CreatureTooltip.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/hand.js",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/turn.js",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/spell.js",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/hero.js",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Battle.vue",
 		"/C/Users/Etienne/Desktop/horde_bk_mmdoc/client/components/battle/Cell.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/store/templates.js",
-		"/C/Users/Etienne/Desktop/Horde/client/data/abilities.js",
-		"/C/Users/Etienne/Desktop/Horde/client/data/mobs.js",
 		"/C/Users/Etienne/Desktop/probe/index.html",
 		"/C/Users/Etienne/Desktop/probe/lodash.js",
 		"/C/Users/Etienne/Desktop/probe/public/index.html",
@@ -386,7 +315,6 @@
 		"/C/Users/Etienne/Desktop/OpenFDA/app/firebase.json",
 		"/C/Users/Etienne/Desktop/OpenFDA/app/index.html",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/ai/computeStateValue.js",
-		"/C/Users/Etienne/Desktop/Horde/client/engine/battle/abilities.js",
 		"/C/Users/Etienne/Desktop/Horde/client/components/Gamemenu.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/components/App.vue",
 		"/C/Users/Etienne/Desktop/Horde/client/components/battle/Overlay.vue",
@@ -396,7 +324,6 @@
 		"/C/Users/Etienne/Desktop/Horde/client/engine/config.js",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/system.js",
 		"/C/Users/Etienne/Desktop/Horde/client/store/game.js",
-		"/C/Users/Etienne/Desktop/Horde/build/webpack.base.js",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/board.css",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/picks.css",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/styles/cards.css",
@@ -411,7 +338,6 @@
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/state/listeners.js",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/creature.js",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/game.js",
-		"/C/Users/Etienne/Desktop/Horde/build/config.js",
 		"/C/Users/Etienne/Desktop/Horde/.gitignore",
 		"/C/Users/Etienne/Desktop/Horde/client/engine/getters.js",
 		"/C/Users/Etienne/Desktop/Horde/client/data/creatures.js",
@@ -433,13 +359,7 @@
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/engine/player.js",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/firebase.js",
 		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/main.js",
-		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/config.js",
-		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/lobby/games.js",
-		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/state/state.js",
-		"/C/Users/Etienne/Desktop/Horde/client/components/Game.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/router/index.js",
-		"/C/Users/Etienne/Desktop/Horde/client/components/Counter.vue",
-		"/C/Users/Etienne/Desktop/Horde/client/components/Battle.vue"
+		"/C/Users/Etienne/Desktop/SetteQuaci/app/scripts/config.js"
 	],
 	"find":
 	{
@@ -447,7 +367,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 96.0,
 		"where_history":
 		[
 			"C:\\Users\\Etienne\\Desktop\\Horde\\client",
@@ -467,6 +387,36 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"AA_TARGET_CREATURE",
+			"creature",
+			"3",
+			"rgb(138, 224, 138)",
+			"addEnergy",
+			"heal",
+			"abilityTargetCreature",
+			"targetCreature",
+			"ACTIVATE_ABILITY",
+			"creature",
+			"this.$store.getters.",
+			"div",
+			"this.$store.getters.",
+			"column",
+			"MOVE_CREATURE",
+			"AbilityId",
+			"moves",
+			"4",
+			"thisCreature",
+			"abilities",
+			"  ",
+			"state",
+			"newState",
+			"state",
+			"state.",
+			"state",
+			"game-container",
+			"[ability.costType]",
+			"costValue",
+			"ability-button",
 			"keywords",
 			"defender",
 			"hp",
@@ -564,37 +514,7 @@
 			"margin.left + ",
 			"id",
 			"400",
-			"title",
-			"\"",
-			"g.selectAll('.bar')\n        .data(values, d => d.key)",
-			"outcome",
-			"variable",
-			"buildBarchart",
-			"weightLoss",
-			"dataFullRange",
-			"outcome",
-			"svgAreaChart",
-			"svg",
-			"valueline",
-			"\"",
-			"[variable]",
-			"date",
-			"\"",
-			"data",
-			"\"",
-			"data",
-			"weightLoss",
-			"letter",
-			"frequency",
-			"\"",
-			",",
-			";",
-			"1",
-			"Child",
-			"deciles",
-			"last",
-			"10",
-			"period"
+			"title"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -660,289 +580,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "client/components/battle/Creature.vue",
-					"settings":
-					{
-						"buffer_size": 8001,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7568,
-								7568
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 305.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "client/components/battle/Keyword.vue",
-					"settings":
-					{
-						"buffer_size": 652,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								640,
-								640
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "client/engine/battle/combat.js",
-					"settings":
-					{
-						"buffer_size": 3594,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3441,
-								3472
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1560.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "client/data/cards.js",
-					"settings":
-					{
-						"buffer_size": 2633,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1973,
-								1973
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1260.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "client/engine/battle/abilities.js",
-					"settings":
-					{
-						"buffer_size": 1289,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "client/engine/battle/creature.js",
-					"settings":
-					{
-						"buffer_size": 6004,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								256,
-								256
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 120.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "client/engine/battle/ai/useCreature.js",
-					"settings":
-					{
-						"buffer_size": 3084,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2635,
-								2635
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "client/components/battle/Hero.vue",
-					"settings":
-					{
-						"buffer_size": 1173,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1029,
-								1029
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 540.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "client/components/battle/Card.vue",
-					"settings":
-					{
-						"buffer_size": 1003,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								937,
-								937
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "client/engine/battle/getInitialState.js",
-					"settings":
-					{
-						"buffer_size": 1421,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								985,
-								985
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],

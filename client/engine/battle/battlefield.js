@@ -23,6 +23,11 @@ export const adjacentAllies = function(state, { row, column, hero }) {
     .filter((c) => c.controller === hero)
 }
 
+export const adjacentEnnemies = function(state, { row, column, hero }) {
+  return adjacentCreatures(state, { row, column })
+    .filter((c) => c.controller !== hero)
+}
+
 export const getFreeCells = function (state, { side } ) {
   const freeCells = []
   const minCol = side === 'opponent' ? (state.columnCount/2 + 1) : 1

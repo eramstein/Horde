@@ -1,9 +1,9 @@
 import aiWorker from 'worker?name=ai!../engine/battle/ai/worker'
 
 import { playCard } from '../engine/battle/hand'
-import { move as moveCreature } from '../engine/battle/creature'
+import { move as moveCreature, reachableCells } from '../engine/battle/creature'
 import { attackCreature } from '../engine/battle/combat'
-import { targetCreature as abilityTargetCreature } from '../engine/battle/abilities'
+import { activateAbility } from '../engine/battle/abilities'
 import { startTurn } from '../engine/battle/turn'
 import { setBattleTemplates } from './templates'
 
@@ -14,10 +14,14 @@ const AI = new aiWorker
 
 const mutations = {
   PLAY_CARD: playCard,
-  MOVE_CREATURE: moveCreature,
+  MOVE_CREATURE(state, { creatureId, cell }) {
+    moveCreature(state, { creatureId, cell })
+    state.ui.reachableCells = null
+  },
   ATTACK_CREATURE: attackCreature,
   START_TURN: startTurn,
-  AA_TARGET_CREATURE: abilityTargetCreature,
+  AA_TARGET_CREATURE: activateAbility,
+  ACTIVATE_ABILITY: activateAbility,
   SELECT_CARD(state, { cardId }) {
     state.ui.selectedCardId = state.ui.selectedCardId === cardId ? null : cardId
     state.ui.selectedCreatureId = null
@@ -28,6 +32,7 @@ const mutations = {
   },
   SELECT_CREATURE(state, { creatureId }) {
     state.ui.selectedCreatureId = state.ui.selectedCreatureId === creatureId ? null : creatureId
+    state.ui.reachableCells =  state.ui.selectedCreatureId === creatureId ? reachableCells(state, { creatureId }) : null
     state.ui.selectedCardId = null
     state.ui.selectedAbilityId = null
   },
@@ -41,6 +46,7 @@ const mutations = {
     state.ui.selectedCreatureId = null
     state.ui.selectedCardId = null
     state.ui.selectedAbilityId = null
+    state.ui.reachableCells = null
   },
 }
 
@@ -133,6 +139,16 @@ const actions = {
     commit('SELECT_ABILITY', { key })
   },
 
+  clickAbilityTooltip({ commit, state }) {
+    const abilityId = state.ui.selectedAbilityId
+    const creatureId = state.ui.selectedCreatureId
+    const ability = state.creatures[creatureId].abilities[abilityId]
+    if (!ability.targetType && ability.trigger==='activated') {
+      commit('ACTIVATE_ABILITY', { selectedCreatureId: creatureId, selectedAbilityId: abilityId })
+      commit('UNSELECT')
+    }
+  },
+
   clickTurnButton({ commit, state }) {
     if (state.currentPlayer === 'player') {
       // pass turn to AI
@@ -188,6 +204,7 @@ const getters = {
   selectedCardId: state => state.ui.selectedCardId,
   selectedCreatureId: state => state.ui.selectedCreatureId,
   selectedAbilityId: state => state.ui.selectedAbilityId,
+  reachableCells: state => state.ui.reachableCells,
   attackAnimation: state => state.ui.attackAnimation,
   turn: state => state.turn,
 }

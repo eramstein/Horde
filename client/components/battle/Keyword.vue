@@ -1,5 +1,5 @@
 <template>
-  <div class="keyword">
+  <div class="keyword" v-if="shortLabel">
    {{ shortLabel + valueLabel}}
   </div>  
 </template>
@@ -7,7 +7,8 @@
 <script>
 
 const labels = {
-  attackAndMove: 'Swift',
+  attackAndMove: { label: 'Swift' },
+  airdrop: { hide: true }
 }
 
 export default {
@@ -21,10 +22,10 @@ export default {
       }      
     },
     keyLabel: function () {
-      return labels[this.data.key] || _.capitalize(this.data.key)
+      return labels[this.data.key] && labels[this.data.key].label || _.capitalize(this.data.key)
     },
     shortLabel: function () {
-      return this.data.key.charAt(0).toUpperCase()
+      return !(labels[this.data.key] && labels[this.data.key].hide) && this.data.key.charAt(0).toUpperCase()
     },
   }
 }

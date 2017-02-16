@@ -7,6 +7,7 @@ export default function (options) {
       selectedCardId: null,
       selectedCreatureId: null,
       selectedAbilityId: null,
+      reachableCells: null,
     },
     turn: 1,
     currentPlayer: 'player',
@@ -22,23 +23,28 @@ export default function (options) {
       cards: {
         [idPrefix.PLAYER_CARDS + '1']: {
           id: idPrefix.PLAYER_CARDS + '1',
-          name: 'Peasant',
-          count: 5,
+          name: 'Thirsty Dwarf',
+          count: 10,
         },
         [idPrefix.PLAYER_CARDS + '2']: {
           id: idPrefix.PLAYER_CARDS + '2',
           name: 'Lightining Bolt',
-          count: 3,
+          count: 1000,
         },
         [idPrefix.PLAYER_CARDS + '3']: {
           id: idPrefix.PLAYER_CARDS + '3',
           name: 'Knight of the Rose',
-          count: 3,
+          count: 10,
         },
         [idPrefix.PLAYER_CARDS + '4']: {
           id: idPrefix.PLAYER_CARDS + '4',
-          name: 'Timz Tower',
-          count: 3,
+          name: 'Dwarven Inn',
+          count: 10,
+        },
+        [idPrefix.PLAYER_CARDS + '5']: {
+          id: idPrefix.PLAYER_CARDS + '5',
+          name: 'Bzzzt',
+          count: 1000,
         }
       }
     },
@@ -46,13 +52,16 @@ export default function (options) {
       name: 'The Black Knight',
       waves: {
         1: [{
-          creature: 'Goblin',
-          count: 3
-        }, {
           creature: 'Wolf',
-          count: 4
+          count: 1
+        }, {
+          creature: 'Goblin',
+          count: 2
         }],
-        2: null,
+        2: [{
+          creature: 'Wolf',
+          count: 3
+        }],
         3: [{
           creature: 'The Black Knight',
           count: 1,
